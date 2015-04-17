@@ -42,7 +42,7 @@ public class GameControllerImpl implements Runnable, GameController {
         }
     }
 
-//    private void postpare() {}
+    // private void postpare() {}
 
     private void prepare() {
         gameScene = new GameScene();
@@ -101,6 +101,10 @@ public class GameControllerImpl implements Runnable, GameController {
     @Override
     public void input(GameInput input) {
         gameScene.playerInput(input);
+        gameScene.oneStep(1);
+    }
+
+    public void oneframe() {
         gameScene.oneStep(1);
     }
 

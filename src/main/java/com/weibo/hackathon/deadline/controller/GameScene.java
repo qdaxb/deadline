@@ -40,12 +40,12 @@ public class GameScene {
         Iterator<Property> it = objects.iterator();
         while (it.hasNext()) {
             Property act = it.next();
-            act.xMove.perform(duration);
-            act.yMove.perform(duration);
+            act.xMove.perform();
+            act.yMove.perform();
         }
         while (actionGenerator.isNextAvailable()) {
             Action action = actionGenerator.nextAction();
-            action.perform(0);
+            action.perform(1);
         }
         determine();
     }
@@ -82,9 +82,9 @@ public class GameScene {
                             prop.disappear = true;
                         }
 
-                        if (point.y < 1) {
+                        if (point.y < 1 - prop.element.size.height) {
                             prop.disappear = true;
-                        } else if (point.y + prop.element.size.height >= scene.size.height) {
+                        } else if (point.y >= scene.size.height - 1) {
                             prop.disappear = true;
                         }
                         if (prop.disappear) {
@@ -170,12 +170,10 @@ public class GameScene {
             prop.disappear = false;
             prop.setPoint(new Point(loc.width, loc.height));
 
-            prop.xMove = new MoveAction();
             prop.xMove.setDirection(BACKWARD);
-            prop.xMove.setSpeed(X_PIXAL_TU_COST);
             prop.xMove.setSteps(Integer.MAX_VALUE); // infinite
+            prop.xMove.setSpeed(5);
 
-            prop.yMove = new MoveAction();
             prop.yMove.setSteps(0);
 
             objects.add(prop);
