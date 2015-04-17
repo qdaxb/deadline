@@ -16,4 +16,10 @@ public class RandomActionGenerator implements ActionGenerator {
         return false;
     }
 
+    @Override
+    public boolean isNextAvailable() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
 }

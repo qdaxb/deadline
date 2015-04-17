@@ -5,9 +5,9 @@ import com.weibo.hackathon.deadline.engine.Action;
 public class InAction implements Action {
 
     @Override
-    public void action() {
+    public void action(int duration) {
         // TODO Auto-generated method stub
-
+        
     }
 
 }

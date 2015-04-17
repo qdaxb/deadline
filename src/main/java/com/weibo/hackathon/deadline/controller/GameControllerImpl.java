@@ -3,7 +3,7 @@ package com.weibo.hackathon.deadline.controller;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.weibo.hackathon.deadline.controller.action.StraightMoveAction;
+import com.weibo.hackathon.deadline.controller.action.MoveAction;
 import com.weibo.hackathon.deadline.engine.GameController;
 import com.weibo.hackathon.deadline.engine.GameEngine;
 import com.weibo.hackathon.deadline.engine.input.GameInput;
@@ -27,6 +27,8 @@ public class GameControllerImpl implements Runnable, GameController {
     GameScene gameScene;
 
     private GameEngine engine;
+
+    TimeController timeController;
 
     @Override
     public synchronized void init() {
@@ -61,12 +63,11 @@ public class GameControllerImpl implements Runnable, GameController {
     }
 
     private boolean isPaused() {
-        // TODO Auto-generated method stub
-        return false;
+        return timeController.isPaused();
     }
 
     public long timeEllapse() {
-        return 0;
+        return timeController.timeInterval();
     }
 
     public void mainLoop() {
@@ -85,9 +86,9 @@ public class GameControllerImpl implements Runnable, GameController {
 
     @Override
     public void input(GameInput input) {
-        StraightMoveAction act = new StraightMoveAction();
-        act.element = gameScene.player();
-        act.speed = STRAIGHT_SPEED.get(input);
+        MoveAction act = new MoveAction();
+        // act.element = gameScene.player();
+        act.paralell = STRAIGHT_SPEED.get(input);
         if (input == GameInput.UP) {}
     }
 

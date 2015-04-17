@@ -2,6 +2,6 @@ package com.weibo.hackathon.deadline.engine;
 
 public interface Action {
     
-    public void action();
+    public void action(int duration);
 
 }

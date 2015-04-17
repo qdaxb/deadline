@@ -7,5 +7,7 @@ public interface ActionGenerator {
     Action nextAction();
     
     boolean isOver();
+    
+    boolean isNextAvailable();
 
 }

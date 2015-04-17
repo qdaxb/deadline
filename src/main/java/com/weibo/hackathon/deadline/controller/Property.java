@@ -1,17 +1,22 @@
 package com.weibo.hackathon.deadline.controller;
 
-import java.util.Collection;
-
-import com.weibo.hackathon.deadline.engine.Action;
+import com.weibo.hackathon.deadline.engine.model.Element;
+import com.weibo.hackathon.deadline.engine.model.Location;
 
 public class Property {
-    
+
+    public int weight;
+
     public int speed;
+
+    public Element element;
+
+    public Point getPoint() {
+        return new Point(element.loc.width, element.loc.height);
+    }
     
-    public int originalSpeed;
-    
-    public Collection<Action> action;
-    
-    public Group group;
+    public void setPoint(Point p) {
+        element.loc = new Location(p.x, p.y);
+    }
 
 }
