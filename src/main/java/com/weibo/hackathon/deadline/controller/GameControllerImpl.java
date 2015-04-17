@@ -89,7 +89,7 @@ public class GameControllerImpl implements Runnable, GameController {
             if (!isPaused()) {
                 int duration = timeEllapse();
                 if (duration > 0) {
-                    gameScene.oneStep(duration);
+                    gameScene.oneStep();
                 }
             }
             try {
@@ -101,11 +101,11 @@ public class GameControllerImpl implements Runnable, GameController {
     @Override
     public void input(GameInput input) {
         gameScene.playerInput(input);
-        gameScene.oneStep(1);
+        gameScene.oneStep();
     }
 
     public void oneframe() {
-        gameScene.oneStep(1);
+        gameScene.oneStep();
     }
 
     @Override

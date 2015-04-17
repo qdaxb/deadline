@@ -38,7 +38,7 @@ public class TextRender implements Render<String> {
     }
 
     private char[][] buildEmptyScene() {
-        char[][] sceneArray = new char[30][80];
+        char[][] sceneArray = new char[30][100];
         for (int i = 0; i < sceneArray.length; i++) {
             for (int j = 0; j < sceneArray[0].length; j++) {
                 sceneArray[i][j] = ' ';
