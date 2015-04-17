@@ -14,16 +14,22 @@ public class Property {
 
     public boolean disappear;
 
-    public MoveAction xMove, yMove;
+    public MoveAction xMove = new MoveAction(), yMove = new MoveAction();
 
     public Point getPoint() {
-        Point point = new Point(element.loc.width, element.loc.height);
+        Point point = new Point(xMove.shift, yMove.shift);
         setPoint(point);
         return point;
     }
 
     public void setPoint(Point p) {
-        element.loc = new Location(p.x, p.y);
+        element.loc = new Location(p.y, p.x);
+        // if (xMove != null) {
+        xMove.shift = p.x;
+        // }
+        // if (yMove != null) {
+        yMove.shift = p.y;
+        // }
     }
 
 }

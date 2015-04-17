@@ -63,7 +63,7 @@ public class RoomManager extends Thread {
 
         while (true) {
             try {
-                Thread.sleep(50);
+                Thread.sleep(1000);
                 for (int i = 0; i < sessions.size(); i++) {
                     sessions.get(i).getInputManager().getInputStatus();
                 }
