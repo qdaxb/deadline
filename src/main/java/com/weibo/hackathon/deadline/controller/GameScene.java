@@ -70,7 +70,7 @@ public class GameScene {
                             point.y = 1;
                             prop.setPoint(point);
                         } else if (point.y + prop.element.size.height >= scene.size.height) {
-                            point.x = scene.size.height - prop.element.size.height - 1;
+                            point.y = scene.size.height - prop.element.size.height - 1;
                             prop.setPoint(point);
                         }
                     } else {
@@ -141,15 +141,15 @@ public class GameScene {
             Property prop = new Property();
             prop.element = player;
             prop.disappear = false;
-            prop.setPoint(new Point(loc.width, loc.height));
+            prop.setPoint(new Point(loc.height, loc.width));
 
-            prop.xMove = new MoveAction();
-            prop.xMove.setDirection(X_BACK);
-            prop.xMove.setSpeed(X_PIXAL_TU_COST);
-            prop.xMove.setSteps(Integer.MAX_VALUE); // infinite
-
-            prop.yMove = new MoveAction();
-            prop.yMove.setSteps(0);
+            // prop.xMove = new MoveAction();
+            // prop.xMove.setDirection(0);
+            // prop.xMove.setSpeed(X_PIXAL_TU_COST);
+            // prop.xMove.setSteps(Integer.MAX_VALUE); // infinite
+            //
+            // prop.yMove = new MoveAction();
+            // prop.yMove.setSteps(0);
 
             objects.add(prop);
             this.player = prop;

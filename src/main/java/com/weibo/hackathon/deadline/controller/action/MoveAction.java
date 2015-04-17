@@ -6,7 +6,7 @@ public class MoveAction {
     public int forward;
     public int shift;
 
-    public int steps;
+    public int steps = 0;
     public int interval = 1;
     public int remain = 0;
 

@@ -27,58 +27,57 @@ public class RoomManager extends Thread {
     @Override
     public void run() {
 
-//        GameObject root = new GameObject();
-//        Element e = new Block();
-//        Size s = new Size(30, 79);
-//        Location l = new Location(1, 1);
-//        e.size = s;
-//        e.loc = l;
-//        root.element = e;
-//
-//        GameObject player = new GameObject();
-//        Player e1 = new Player();
-//        Location l1 = new Location(1, 10);
-//        e1.size = s;
-//        e1.loc = l1;
-//        player.element = e1;
-//
-//        root.children.add(player);
-//        player.father = root;
-//
-//        GameObject string = new GameObject();
-//        GameString e2 = new GameString();
-//        e2.content = "Fuck";
-//        e2.size = new Size(1, 9);
-//        e2.loc = new Location(28, 60);
-//        string.element = e2;
-//
-//        root.children.add(player);
-//        root.children.add(string);
-//        string.father = root;
-//        player.father = root;
-//        double h = 0;
-//        int w = 0;
+        // GameObject root = new GameObject();
+        // Element e = new Block();
+        // Size s = new Size(30, 79);
+        // Location l = new Location(1, 1);
+        // e.size = s;
+        // e.loc = l;
+        // root.element = e;
+        //
+        // GameObject player = new GameObject();
+        // Player e1 = new Player();
+        // Location l1 = new Location(1, 10);
+        // e1.size = s;
+        // e1.loc = l1;
+        // player.element = e1;
+        //
+        // root.children.add(player);
+        // player.father = root;
+        //
+        // GameObject string = new GameObject();
+        // GameString e2 = new GameString();
+        // e2.content = "Fuck";
+        // e2.size = new Size(1, 9);
+        // e2.loc = new Location(28, 60);
+        // string.element = e2;
+        //
+        // root.children.add(player);
+        // root.children.add(string);
+        // string.father = root;
+        // player.father = root;
+        // double h = 0;
+        // int w = 0;
         GameController controller = new GameControllerImpl();
         controller.init();
 
         while (true) {
             try {
-                Thread.sleep(1000);
-//                for (int i = 0; i < sessions.size(); i++) {
-//                    sessions.get(i).getInputManager().getInputStatus();
-//                }
-                GameInput input  =sessions.get(0).getInputManager().getInputStatus();
-                System.out.println(input);
+                Thread.sleep(100);
+                // for (int i = 0; i < sessions.size(); i++) {
+                // sessions.get(i).getInputManager().getInputStatus();
+                // }
+                GameInput input = sessions.get(0).getInputManager().getInputStatus();
                 controller.input(input);
-                
+
                 Scene scene = controller.getScene();
                 GameObject translate = ModelAdapter.translate(scene);
-                
 
 
-//                h += 0.08;
-//                l1.height = (int) Math.abs((Math.sin(h)) * 5) + 1;
-//                l1.width = (w++) % 80;
+
+                // h += 0.08;
+                // l1.height = (int) Math.abs((Math.sin(h)) * 5) + 1;
+                // l1.width = (w++) % 80;
                 String data = new TextRender().render(translate);
 
                 for (int i = 0; i < sessions.size(); i++) {
