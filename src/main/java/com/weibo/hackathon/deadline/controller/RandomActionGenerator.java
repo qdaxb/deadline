@@ -40,10 +40,10 @@ public class RandomActionGenerator implements ActionGenerator {
         if (action != null) {
             return true;
         } else {
-            if (rnd.nextDouble() > 0.9) {
+            if (rnd.nextDouble() > 0.98) {
                 over = true;
                 return false;
-            } else if (rnd.nextDouble() > 0.5) {
+            } else if (rnd.nextDouble() > 0.98) {
                 Element elem = null;
                 int type = rnd.nextInt(2);
                 if (type == 0) {
@@ -53,7 +53,7 @@ public class RandomActionGenerator implements ActionGenerator {
                 }
                 elem.size = new Size(rnd.nextInt(5) + 1, rnd.nextInt(5) + 1);
                 Size size = gs.getScene().size;
-                elem.loc = new Location(size.width - elem.size.width - 1, rnd.nextInt(size.height - elem.size.height - 1) + 1);
+                elem.loc = new Location(rnd.nextInt(size.height - elem.size.height - 2) + 1, size.width - elem.size.width - 1);
                 MakeObjectAction act = new MakeObjectAction(elem, gs);
                 action = act;
             }

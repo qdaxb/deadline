@@ -31,13 +31,14 @@ public class MoveAction {
         this.interval = interval;
     }
 
-    public void perform(int frames) {
+    public void perform() {
         if (steps > 0) {
-            frames += remain;
-            int count = frames / interval;
-            shift += count * forward;
-            remain = frames % interval;
-            steps -= count;
+            remain++;
+            if(remain >= interval) {
+                steps --;
+                shift += forward;
+                remain = remain % interval;
+            }
             if (steps < 0) {
                 steps = 0;
             }
