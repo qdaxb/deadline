@@ -4,9 +4,10 @@ import java.util.ArrayList;
 
 import com.weibo.hackathon.deadline.model.Element;
 import com.weibo.hackathon.deadline.model.Layer;
+import com.weibo.hackathon.deadline.model.Location;
 
-public class SceneManager {
-    public char[][] sceneArray = new char[20][80];
+public class SceneManager implements OnElementChangeListner, Scene {
+    private char[][] sceneArray = new char[20][80];
     public ArrayList<Layer> layers;
 
     public void buildScene() {
@@ -16,7 +17,6 @@ public class SceneManager {
             }
         }
     }
-
 
 
     public void insertShape(char[][] shape, Location loc) {
@@ -41,15 +41,16 @@ public class SceneManager {
     }
 
 
-    public static class Location {
-        public Location(int height, int width) {
-            this.height = height;
-            this.width = width;
-        }
-
-        public int height;
-        public int width;
+    @Override
+    public void onElementChange() {
+        buildScene();
     }
+
+    @Override
+    public char[][] getSceneArray() {
+        return sceneArray;
+    }
+
 
     public static void main(String[] args) {
         char[][] sceneArray = new char[20][80];
@@ -73,4 +74,5 @@ public class SceneManager {
 
         SceneManager.printArray(m.sceneArray);
     }
+
 }
