@@ -1,6 +1,5 @@
-package com.weibo.hackathon.deadline.engine.flow;
+package com.weibo.hackathon.deadline.engine;
 
-import com.weibo.hackathon.deadline.engine.GameEngine;
 import com.weibo.hackathon.deadline.engine.input.GameInput;
 
 public interface GameController {
@@ -10,5 +9,6 @@ public interface GameController {
     public void input(GameInput input);
     
     public void setGameEngine(GameEngine engine);
+    
     
 }

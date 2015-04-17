@@ -3,8 +3,8 @@ package com.weibo.hackathon.deadline.engine.model;
 
 public class Element {
 
-    Location loc;
+    public Location loc;
     
-    Size size;
+    public Size size;
     
 }

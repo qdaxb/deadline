@@ -2,7 +2,7 @@ package com.weibo.hackathon.deadline.controller;
 
 import java.util.Collection;
 
-import com.weibo.hackathon.deadline.engine.flow.Action;
+import com.weibo.hackathon.deadline.engine.Action;
 
 public class Property {
     
