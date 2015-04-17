@@ -69,17 +69,10 @@ public class ShapeRender implements Render<char[][]> {
 
 
     private char[][] renderingCandy(Candy candy) {
-        Size size = candy.size;
-        char[][] shape = new char[size.height][size.width];
+        char[][] shape = new char[4][2];
         for (int i = 0; i < shape.length; i++) {
             for (int j = 0; j < shape[0].length; j++) {
-                boolean isHeightMatch = i == 0 || i == shape.length - 1;
-                boolean isWidthMatch = j == 0 || j == shape[0].length - 1;
-                if (isHeightMatch || isWidthMatch) {
-                    shape[i][j] = '*';
-                } else {
-                    shape[i][j] = ' ';
-                }
+                shape[i][j] = '8';
             }
         }
         return shape;
