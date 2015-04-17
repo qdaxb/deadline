@@ -1,4 +1,4 @@
-package com.weibo.hackathon.deadline.model;
+package com.weibo.hackathon.deadline.engine.model;
 
 import java.util.ArrayList;
 
