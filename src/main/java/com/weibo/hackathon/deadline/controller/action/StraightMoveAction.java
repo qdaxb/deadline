@@ -1,8 +1,12 @@
 package com.weibo.hackathon.deadline.controller.action;
 
 import com.weibo.hackathon.deadline.engine.Action;
+import com.weibo.hackathon.deadline.engine.model.Element;
 
-public class MoveAction implements Action {
+public class StraightMoveAction implements Action {
+    
+    public Element element;
+    public int speed;
 
     @Override
     public void action() {

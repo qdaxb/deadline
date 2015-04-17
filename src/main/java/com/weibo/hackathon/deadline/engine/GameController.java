@@ -12,5 +12,11 @@ public interface GameController {
     public void setGameEngine(GameEngine engine);
     
     public Scene getScene();
+
+    public abstract void resume();
+
+    public abstract void pause();
+
+    public abstract void stop();
     
 }

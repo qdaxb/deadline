@@ -11,5 +11,7 @@ public class Property {
     public int originalSpeed;
     
     public Collection<Action> action;
+    
+    public Group group;
 
 }
