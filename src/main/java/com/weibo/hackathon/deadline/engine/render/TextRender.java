@@ -2,23 +2,23 @@ package com.weibo.hackathon.deadline.engine.render;
 
 import java.util.concurrent.LinkedBlockingDeque;
 
-import com.weibo.hackathon.deadline.engine.model.Element;
+import com.weibo.hackathon.deadline.engine.model.GameObject;
 import com.weibo.hackathon.deadline.engine.model.Location;
 
 public class TextRender implements Render<String> {
     @Override
-    public String render(Element root) {
+    public String render(GameObject root) {
         char[][] sceneArray = renderScene(root);
         return buildSceneString(sceneArray);
     }
     
-    private char[][] renderScene(Element root) {
+    private char[][] renderScene(GameObject root) {
         char[][] sceneArray = buildEmptyScene();
 
-        LinkedBlockingDeque<Element> elementQueue = new LinkedBlockingDeque<>();
+        LinkedBlockingDeque<GameObject> elementQueue = new LinkedBlockingDeque<>();
         elementQueue.add(root);
         while (elementQueue.peek() != null) {
-            Element element = elementQueue.poll();
+            GameObject element = elementQueue.poll();
             insertShape(sceneArray, element.shape, element.loc);
             elementQueue.addAll(element.children);
         }
