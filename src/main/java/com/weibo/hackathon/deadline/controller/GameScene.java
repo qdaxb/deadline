@@ -16,6 +16,7 @@ import com.weibo.hackathon.deadline.engine.input.GameInput;
 import com.weibo.hackathon.deadline.engine.model.Block;
 import com.weibo.hackathon.deadline.engine.model.Candy;
 import com.weibo.hackathon.deadline.engine.model.Element;
+import com.weibo.hackathon.deadline.engine.model.InfoElement;
 import com.weibo.hackathon.deadline.engine.model.Location;
 import com.weibo.hackathon.deadline.engine.model.Player;
 import com.weibo.hackathon.deadline.engine.model.Scene;
@@ -49,19 +50,21 @@ public class GameScene {
     }
 
     public void oneStep() {
-        Iterator<Property> it = objects.iterator();
-        while (it.hasNext()) {
-            Property act = it.next();
-            act.xMove.perform();
-            act.yMove.perform();
+        if (result == null) {
+            Iterator<Property> it = objects.iterator();
+            while (it.hasNext()) {
+                Property act = it.next();
+                act.xMove.perform();
+                act.yMove.perform();
+            }
+            while (actionGenerator.isNextAvailable()) {
+                Action action = actionGenerator.nextAction();
+                action.perform(1);
+            }
+            determine();
+            dealWithBlock();
+            dealWithCandy();
         }
-        while (actionGenerator.isNextAvailable()) {
-            Action action = actionGenerator.nextAction();
-            action.perform(1);
-        }
-        determine();
-        dealWithBlock();
-        dealWithCandy();
     }
 
     private void dealWithCandy() {
@@ -210,17 +213,22 @@ public class GameScene {
 
     public Scene getScene() {
         scene.elements.clear();
-        synchronized (objects) {
-            Iterator<Property> it = objects.iterator();
-            while (it.hasNext()) {
-                Property prop = it.next();
-                prop.getPoint();
-                if (prop.shouldDisappear()) {
-                    it.remove();
-                } else {
-                    scene.elements.add(prop.element);
+        if (!isOver()) {
+            synchronized (objects) {
+                Iterator<Property> it = objects.iterator();
+                while (it.hasNext()) {
+                    Property prop = it.next();
+                    prop.getPoint();
+                    if (prop.shouldDisappear()) {
+                        it.remove();
+                    } else {
+                        scene.elements.add(prop.element);
+                    }
                 }
             }
+        } else {
+            String info = result.text();
+            scene.elements.add(new InfoElement(info));
         }
         return scene;
     }
