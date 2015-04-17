@@ -133,6 +133,30 @@ public class GameScene {
         return result != null;
     }
 
+    public void setPlayer(Player player) {
+        if (player == null) {
+            return;
+        } else {
+            Location loc = player.loc;
+            Property prop = new Property();
+            prop.element = player;
+            prop.disappear = false;
+            prop.setPoint(new Point(loc.width, loc.height));
+
+            prop.xMove = new MoveAction();
+            prop.xMove.setDirection(X_BACK);
+            prop.xMove.setSpeed(X_PIXAL_TU_COST);
+            prop.xMove.setSteps(Integer.MAX_VALUE); // infinite
+
+            prop.yMove = new MoveAction();
+            prop.yMove.setSteps(0);
+
+            objects.add(prop);
+            this.player = prop;
+        }
+
+    }
+
     public void addElement(Element element) {
         if (element == null) {
             return;

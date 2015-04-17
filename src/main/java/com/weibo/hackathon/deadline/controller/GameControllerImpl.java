@@ -6,7 +6,10 @@ import java.util.Map;
 import com.weibo.hackathon.deadline.engine.GameController;
 import com.weibo.hackathon.deadline.engine.GameEngine;
 import com.weibo.hackathon.deadline.engine.input.GameInput;
+import com.weibo.hackathon.deadline.engine.model.Location;
+import com.weibo.hackathon.deadline.engine.model.Player;
 import com.weibo.hackathon.deadline.engine.model.Scene;
+import com.weibo.hackathon.deadline.engine.model.Size;
 
 public class GameControllerImpl implements Runnable, GameController {
 
@@ -33,7 +36,9 @@ public class GameControllerImpl implements Runnable, GameController {
     public synchronized void init() {
         if (worker == null) {
             worker = new Thread(this);
+            prepare();
             worker.start();
+            postpare();
         }
     }
 
@@ -44,6 +49,12 @@ public class GameControllerImpl implements Runnable, GameController {
         actionGenerator = new RandomActionGenerator(gameScene);
         timeController = new Frame100TimeController();
         gameScene.actionGenerator = actionGenerator;
+        
+        Player player = new Player();
+        Size sceneSize = gameScene.scene.size;
+        player.loc = new Location(sceneSize.width / 2, sceneSize.height / 2);
+        player.size = new Size(5, 3);
+        gameScene.setPlayer(player);
     }
 
     @Override
@@ -104,9 +115,7 @@ public class GameControllerImpl implements Runnable, GameController {
 
     @Override
     public void run() {
-        prepare();
         mainLoop();
-        postpare();
     }
 
     public GameEngine getEngine() {

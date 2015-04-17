@@ -7,12 +7,9 @@ public class ModelAdapter {
     public static GameObject translate(final Scene scene) {
         GameObject go = new GameObject();
         go.father = null;
-        go.element = new Element() {
-            {
-                this.size = scene.size;
-                this.loc = new Location(0, 0);
-            }
-        };
+        go.element = new Block();
+        go.element.size = scene.size;
+        go.element.loc = new Location(1, 1);
         go.children = new ArrayList<GameObject>();
         for (Element elem : scene.elements) {
             GameObject ge = new GameObject();

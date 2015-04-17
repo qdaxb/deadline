@@ -5,7 +5,7 @@ import java.util.Collection;
 
 public class Scene {
     
-    public Size size;
+    public Size size = new Size(28, 78);
     
     public Collection<Element> elements = new ArrayList<Element>();
     
