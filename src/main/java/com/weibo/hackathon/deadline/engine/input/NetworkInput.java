@@ -21,15 +21,22 @@ public class NetworkInput implements InputManager {
     }
 
     @Override
-    public Set<GameInput> getInputStatus() {
+    public GameInput getInputStatus() {
+        GameInput input = null;
         try {
-
-            char[] data = channel.receive(); 
-        }catch(Exception e) {
+            char[] data = channel.receive();
+            for (char key : data) {
+                if (key == 'j') {
+                    input = GameInput.DOWN;
+                } else if (key == 'k') {
+                    input = GameInput.UP;
+                }
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return input;
     }
-    public void close() {
-    }
+
+    public void close() {}
 }

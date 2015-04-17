@@ -63,12 +63,17 @@ public class RoomManager extends Thread {
 
         while (true) {
             try {
-                Thread.sleep(50);
-                for (int i = 0; i < sessions.size(); i++) {
-                    sessions.get(i).getInputManager().getInputStatus();
-                }
+                Thread.sleep(1000);
+//                for (int i = 0; i < sessions.size(); i++) {
+//                    sessions.get(i).getInputManager().getInputStatus();
+//                }
+                GameInput input  =sessions.get(0).getInputManager().getInputStatus();
+                System.out.println(input);
+                controller.input(input);
+                
                 Scene scene = controller.getScene();
                 GameObject translate = ModelAdapter.translate(scene);
+                
 
 
 //                h += 0.08;
