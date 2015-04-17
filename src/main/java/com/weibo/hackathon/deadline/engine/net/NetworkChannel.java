@@ -31,15 +31,25 @@ public class NetworkChannel {
         writer.write((char)0x5b);
         writer.write((char)0x48);
         writer.flush();
-        
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                int len;
+                char chars[] = new char[64];
+                try {
+                    while((len = reader.read(chars)) != -1) {
+                        buffer.append(new String(chars,0,len));
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        };
+        thread.start();
     }
 
     public char[] receive() throws IOException {
-        int len;
-        char chars[] = new char[64];
-        if((len = reader.read(chars)) != -1) {
-            buffer.append(new String(chars,0,len));
-        }
         char[] data = buffer.toString().toCharArray();
         // 并发问题暂时无视
         buffer.setLength(0);
