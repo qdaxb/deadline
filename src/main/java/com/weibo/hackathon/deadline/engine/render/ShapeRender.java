@@ -1,5 +1,6 @@
 package com.weibo.hackathon.deadline.engine.render;
 
+import com.weibo.hackathon.deadline.engine.model.AscIIImage;
 import com.weibo.hackathon.deadline.engine.model.Block;
 import com.weibo.hackathon.deadline.engine.model.Candy;
 import com.weibo.hackathon.deadline.engine.model.Element;
@@ -24,7 +25,10 @@ public class ShapeRender implements Render<char[][]> {
             shape = renderingPlayer((Player) element);
         } else if (element instanceof GameString) {
             shape = renderingString((GameString) element);
+        } else if (element instanceof AscIIImage) {
+            shape = readeringAscIIImage();
         } else {
+
         }
         return shape;
     }
@@ -55,7 +59,7 @@ public class ShapeRender implements Render<char[][]> {
                 int positon = i * j + j;
                 if (positon < content.length) {
                     shape[i][j] = content[positon];
-                }else {
+                } else {
                     shape[i][j] = ' ';
                 }
             }
@@ -95,6 +99,36 @@ public class ShapeRender implements Render<char[][]> {
         return shape;
     }
 
+    private char[][] readeringAscIIImage() {
+        char[][] shape = new char[25][8];
+        shape[0] = "   ___  ".toCharArray();
+        shape[1] = "  / _ \\ ".toCharArray();
+        shape[2] = " / // / ".toCharArray();
+        shape[3] = "/____/_ ".toCharArray();
+        shape[4] = "  / __/ ".toCharArray();
+        shape[5] = " / _/   ".toCharArray();
+        shape[6] = "/___/_  ".toCharArray();
+        shape[7] = "  / _ | ".toCharArray();
+        shape[8] = " / __ | ".toCharArray();
+        shape[9] = "/_/_|_| ".toCharArray();
+        shape[10] = "  / _ \\ ".toCharArray();
+        shape[11] = " / // / ".toCharArray();
+        shape[12] = "/____/  ".toCharArray();
+        shape[13] = "  / /   ".toCharArray();
+        shape[14] = " / /__  ".toCharArray();
+        shape[15] = "/____/_ ".toCharArray();
+        shape[16] = "  /  _/ ".toCharArray();
+        shape[17] = " _/ /   ".toCharArray();
+        shape[18] = "/___/ __".toCharArray();
+        shape[19] = "  / |/ /".toCharArray();
+        shape[20] = " /    / ".toCharArray();
+        shape[21] = "/_/|_/_ ".toCharArray();
+        shape[22] = "  / __/ ".toCharArray();
+        shape[23] = " / _/   ".toCharArray();
+        shape[24] = "/___/   ".toCharArray();
+        return shape;
+
+    }
 
     public static void main(String[] args) {
         GameObject root = new GameObject();
@@ -114,14 +148,14 @@ public class ShapeRender implements Render<char[][]> {
 
         root.children.add(player);
         player.father = root;
-        
+
         GameObject string = new GameObject();
         GameString e2 = new GameString();
         e2.content = "Fuck";
         e2.size = new Size(1, 9);
         e2.loc = new Location(28, 60);
         string.element = e2;
-        
+
         root.children.add(player);
         root.children.add(string);
         string.father = root;

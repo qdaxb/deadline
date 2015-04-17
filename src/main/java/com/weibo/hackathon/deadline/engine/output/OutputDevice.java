@@ -7,4 +7,6 @@ import java.io.IOException;
  */
 public interface OutputDevice<T> {
     void output(String data) throws IOException;
+    
+    void outputRaw(String data) throws IOException;
 }
