@@ -1,44 +1,54 @@
 package com.weibo.hackathon.deadline.controller.action;
 
-import com.weibo.hackathon.deadline.controller.Point;
-import com.weibo.hackathon.deadline.controller.Property;
 import com.weibo.hackathon.deadline.engine.Action;
 
 public class MoveAction implements Action {
 
-    public Property target;
-
-    public int paralell;
     public int forward;
-    public Point point;
+    public int shift;
 
-    public int frame;
-    public int xframe, yframe;
-    public int xremain, yremain;
-    public int xset, yset;
+    public int steps;
+    public int interval = 1;
+    public int remain = 0;
+
+    public void setDirection(int forward) {
+        if (forward > 0) {
+            this.forward = 1;
+        } else if (forward < 0) {
+            this.forward = -1;
+        } else {
+            this.forward = 0;
+        }
+    }
+
+    public void setSteps(int steps) {
+        this.steps = steps;
+    }
+
+    /**
+     * @param interval
+     */
+    public void setSpeed(int interval) {
+        this.interval = interval;
+    }
 
     @Override
-    public void perform() {
-        if (xremain > 0) {
-            xremain--;
-        } else {
-            xremain = xset;
-            xframe--;
-            point.x += forward;
+    public void perform(int frames) {
+        if (steps > 0) {
+            frames += remain;
+            int count = frames / interval;
+            shift += count * forward;
+            remain = frames % interval;
+            steps -= count;
+            if (steps < 0) {
+                steps = 0;
+            }
         }
-        if (yremain > 0) {
-            yremain--;
-        } else {
-            yremain = yset;
-            yframe--;
-            point.y += paralell;
-        }
-        target.setPoint(point);
     }
 
     @Override
     public boolean active() {
-        return frame > 0;
+        return steps > 0;
     }
 
 }

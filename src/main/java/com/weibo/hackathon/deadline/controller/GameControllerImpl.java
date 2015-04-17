@@ -3,7 +3,6 @@ package com.weibo.hackathon.deadline.controller;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.weibo.hackathon.deadline.controller.action.MoveAction;
 import com.weibo.hackathon.deadline.engine.GameController;
 import com.weibo.hackathon.deadline.engine.GameEngine;
 import com.weibo.hackathon.deadline.engine.input.GameInput;
@@ -66,14 +65,14 @@ public class GameControllerImpl implements Runnable, GameController {
         return timeController.isPaused();
     }
 
-    public long timeEllapse() {
+    public int timeEllapse() {
         return timeController.timeInterval();
     }
 
     public void mainLoop() {
         while (!isOver()) {
             if (!isPaused()) {
-                long duration = timeEllapse();
+                int duration = timeEllapse();
                 if (duration > 0) {
                     gameScene.oneStep(duration);
                 }
@@ -86,10 +85,7 @@ public class GameControllerImpl implements Runnable, GameController {
 
     @Override
     public void input(GameInput input) {
-        MoveAction act = new MoveAction();
-        // act.element = gameScene.player();
-        act.paralell = STRAIGHT_SPEED.get(input);
-        if (input == GameInput.UP) {}
+        gameScene.playerInput(input);
     }
 
     @Override
