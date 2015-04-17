@@ -17,7 +17,7 @@ public class GameScene {
 
     private static final int X_BACK = -1;
     private static final int X_PIXAL_TU_COST = 50;
-    Scene scene;
+    Scene scene = new Scene();
     private final List<Property> objects = new LinkedList<Property>();
     Property player;
     GameResult result = null;

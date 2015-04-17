@@ -26,7 +26,9 @@ public class TextRender implements Render<String> {
                 loc.width += father.element.loc.width;
             }
             char[][] shape = shapeRender.render(obj);
-            insertShape(sceneArray, shape, loc);
+            if (shape != null) {
+                insertShape(sceneArray, shape, loc);
+            }
             if (obj.children != null) {
                 elementQueue.addAll(obj.children);
             }
@@ -51,7 +53,7 @@ public class TextRender implements Render<String> {
                 boolean isHeightMatch = i > sceneArray.length - loc.height - shape.length && i <= sceneArray.length - loc.height;
                 boolean isWidthMatch = j >= loc.width && j < loc.width + shape[0].length;
                 if (isHeightMatch && isWidthMatch) {
-                    char pixel = shape[i -  (sceneArray.length - shape.length - loc.height) - 1][j - loc.width];
+                    char pixel = shape[i - (sceneArray.length - shape.length - loc.height) - 1][j - loc.width];
                     if (pixel != ' ' && pixel != '0') {
                         sceneArray[i][j] = pixel;
                     }

@@ -24,6 +24,7 @@ public class ShapeRender implements Render<char[][]> {
             shape = renderingPlayer((Player) element);
         } else if (element instanceof GameString) {
             shape = renderingString((GameString) element);
+        } else {
         }
         return shape;
     }
