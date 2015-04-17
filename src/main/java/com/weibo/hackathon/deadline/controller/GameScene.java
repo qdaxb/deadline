@@ -25,6 +25,7 @@ public class GameScene {
     public static final org.slf4j.Logger log = LoggerFactory.getLogger(GameScene.class);
 
     private static final float OBJECT_SPEED = -0.2f;
+    private static final float X_SPEED = 0.5f;
     private static final int FORWARD = 1;
     private static final int BACKWARD = -1;
 
@@ -40,7 +41,6 @@ public class GameScene {
             return Integer.compare(o1.getPoint().x, o2.getPoint().x);
         }
     };
-    private static final float X_SPEED = OBJECT_SPEED;
 
     public Action getAction(Element elem, Class<? extends Action> c) {
         return null;
