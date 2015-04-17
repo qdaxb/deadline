@@ -3,7 +3,6 @@ package com.weibo.hackathon.deadline.controller;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.weibo.hackathon.deadline.controller.action.MoveAction;
 import com.weibo.hackathon.deadline.engine.GameController;
 import com.weibo.hackathon.deadline.engine.GameEngine;
 import com.weibo.hackathon.deadline.engine.input.GameInput;
@@ -38,42 +37,46 @@ public class GameControllerImpl implements Runnable, GameController {
         }
     }
 
-    private void postpare() {
-        // TODO Auto-generated method stub
-
-    }
+    private void postpare() {}
 
     private void prepare() {
         gameScene = new GameScene();
-        actionGenerator = new RandomActionGenerator();
+        actionGenerator = new RandomActionGenerator(gameScene);
+        timeController = new Frame100TimeController();
+        gameScene.actionGenerator = actionGenerator;
     }
 
     @Override
-    public void stop() {}
+    public void stop() {
+        gameScene.cancel();
+    }
 
     @Override
-    public void pause() {}
+    public void pause() {
+        timeController.pause();
+    }
 
     @Override
-    public void resume() {}
+    public void resume() {
+        timeController.resume();
+    }
 
     private boolean isOver() {
-        // TODO Auto-generated method stub
-        return false;
+        return gameScene.isOver();
     }
 
     private boolean isPaused() {
         return timeController.isPaused();
     }
 
-    public long timeEllapse() {
+    public int timeEllapse() {
         return timeController.timeInterval();
     }
 
     public void mainLoop() {
         while (!isOver()) {
             if (!isPaused()) {
-                long duration = timeEllapse();
+                int duration = timeEllapse();
                 if (duration > 0) {
                     gameScene.oneStep(duration);
                 }
@@ -86,10 +89,7 @@ public class GameControllerImpl implements Runnable, GameController {
 
     @Override
     public void input(GameInput input) {
-        MoveAction act = new MoveAction();
-        // act.element = gameScene.player();
-        act.paralell = STRAIGHT_SPEED.get(input);
-        if (input == GameInput.UP) {}
+        gameScene.playerInput(input);
     }
 
     @Override

@@ -1,26 +1,51 @@
 package com.weibo.hackathon.deadline.controller.action;
 
-import com.weibo.hackathon.deadline.controller.Group;
-import com.weibo.hackathon.deadline.controller.Momentum;
-import com.weibo.hackathon.deadline.controller.Point;
-import com.weibo.hackathon.deadline.controller.Property;
-import com.weibo.hackathon.deadline.engine.Action;
 
-public class MoveAction implements Action {
+public class MoveAction {
 
-    public Property target;
-
-    public int paralell;
     public int forward;
-    public Momentum result;
-    public Point point;
-    public Group group;
+    public int shift;
 
-    @Override
-    public void action(int duration) {
-        point = target.getPoint();
-        point.x += duration * forward;
-        point.y += duration * paralell;
+    public int steps;
+    public int interval = 1;
+    public int remain = 0;
+
+    public void setDirection(int forward) {
+        if (forward > 0) {
+            this.forward = 1;
+        } else if (forward < 0) {
+            this.forward = -1;
+        } else {
+            this.forward = 0;
+        }
+    }
+
+    public void setSteps(int steps) {
+        this.steps = steps;
+    }
+
+    /**
+     * @param interval
+     */
+    public void setSpeed(int interval) {
+        this.interval = interval;
+    }
+
+    public void perform(int frames) {
+        if (steps > 0) {
+            frames += remain;
+            int count = frames / interval;
+            shift += count * forward;
+            remain = frames % interval;
+            steps -= count;
+            if (steps < 0) {
+                steps = 0;
+            }
+        }
+    }
+
+    public boolean active() {
+        return steps > 0;
     }
 
 }
