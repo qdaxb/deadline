@@ -15,7 +15,7 @@ public class TextRender implements Render<String> {
     private char[][] renderScene(GameObject root) {
         char[][] sceneArray = buildEmptyScene();
 
-        LinkedBlockingDeque<GameObject> elementQueue = new LinkedBlockingDeque<>();
+        LinkedBlockingDeque<GameObject> elementQueue = new LinkedBlockingDeque<GameObject>();
         elementQueue.add(root);
         while (elementQueue.peek() != null) {
             GameObject obj = elementQueue.poll();

@@ -7,6 +7,7 @@ import java.net.Socket;
  * Created by axb on 15/4/17.
  */
 public class NetworkChannel {
+    private int i=0;
     private Socket socket;
     private Reader reader;
     private Writer writer;
@@ -14,12 +15,23 @@ public class NetworkChannel {
     public NetworkChannel(Socket socket) throws IOException {
         this.socket = socket;
         reader = new InputStreamReader(socket.getInputStream());
-        writer = new OutputStreamWriter(socket.getOutputStream());
-        Thread thread = new Thread() {
-            @Override
-            public void run() {
-            }
-        };
+        writer = new OutputStreamWriter(socket.getOutputStream(),"ISO-8859-1");
+        writer.write((char)255);
+        writer.write((char)253);
+        writer.write((char)34);
+        writer.write((char)1);
+        writer.write((char)0x0);
+        writer.write((char)255);
+        writer.write((char)240);
+        writer.write((char)255);
+        writer.write((char)251);
+        writer.write((char)1);
+        writer.write("\u001B[2J");
+        writer.write((char)0x1b);
+        writer.write((char)0x5b);
+        writer.write((char)0x48);
+        writer.flush();
+        
     }
 
     public char[] receive() throws IOException {
@@ -37,8 +49,23 @@ public class NetworkChannel {
 
     public void send(char[] data) {
         try {
-            writer.write("test");
+            writer.write("**********************************\r\n");
+            writer.write("**********************************\r\n");
+            writer.write("**********************************\r\n");
+            writer.write("**********************************\r\n");
+            writer.write("**********************************\r\n");
+            writer.write("**********************************\r\n");
+            writer.write("**********************************\r\n");
+            writer.write("**********************************\r\n");
+            writer.write("**********************************\r\n");
+            writer.write(i+++"**********************************\r\n");
+            writer.write("**********************************\r\n");
+            writer.write((char)0x1b);
+            writer.write((char)0x5b);
+            writer.write((char)0x48);
+
             writer.flush();
+
         } catch (IOException e) {
             e.printStackTrace();
         }

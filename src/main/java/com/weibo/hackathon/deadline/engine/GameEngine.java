@@ -28,7 +28,7 @@ public class GameEngine {
     public void start() {
         while (true) {
             try {
-                Thread.sleep(1000);
+                Thread.sleep(100);
                 for(int i=0;i<sessions.size();i++) {
                     sessions.get(i).getInputManager().getInputStatus();
                 }
