@@ -1,8 +1,7 @@
 package com.weibo.hackathon.deadline.controller.action;
 
-import com.weibo.hackathon.deadline.engine.Action;
 
-public class MoveAction implements Action {
+public class MoveAction {
 
     public int forward;
     public int shift;
@@ -32,7 +31,6 @@ public class MoveAction implements Action {
         this.interval = interval;
     }
 
-    @Override
     public void perform(int frames) {
         if (steps > 0) {
             frames += remain;
@@ -46,7 +44,6 @@ public class MoveAction implements Action {
         }
     }
 
-    @Override
     public boolean active() {
         return steps > 0;
     }

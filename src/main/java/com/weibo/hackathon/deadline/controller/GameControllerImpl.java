@@ -37,28 +37,32 @@ public class GameControllerImpl implements Runnable, GameController {
         }
     }
 
-    private void postpare() {
-        // TODO Auto-generated method stub
-
-    }
+    private void postpare() {}
 
     private void prepare() {
         gameScene = new GameScene();
-        actionGenerator = new RandomActionGenerator();
+        actionGenerator = new RandomActionGenerator(gameScene);
+        timeController = new Frame100TimeController();
+        gameScene.actionGenerator = actionGenerator;
     }
 
     @Override
-    public void stop() {}
+    public void stop() {
+        gameScene.cancel();
+    }
 
     @Override
-    public void pause() {}
+    public void pause() {
+        timeController.pause();
+    }
 
     @Override
-    public void resume() {}
+    public void resume() {
+        timeController.resume();
+    }
 
     private boolean isOver() {
-        // TODO Auto-generated method stub
-        return false;
+        return gameScene.isOver();
     }
 
     private boolean isPaused() {
