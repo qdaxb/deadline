@@ -24,8 +24,7 @@ public class NetworkInput implements InputManager {
     public Set<GameInput> getInputStatus() {
         try {
 
-            char[] data = channel.receive();
-            System.out.println(new String(data));
+            char[] data = channel.receive(); 
         }catch(Exception e) {
             e.printStackTrace();
         }

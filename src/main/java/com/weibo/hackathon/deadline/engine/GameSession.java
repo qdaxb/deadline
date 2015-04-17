@@ -9,6 +9,10 @@ import com.weibo.hackathon.deadline.engine.output.OutputDevice;
 public class GameSession {
     private InputManager inputManager;
     private OutputDevice outputDevice;
+    
+    public void close(){
+        
+    }
 
     public InputManager getInputManager() {
         return inputManager;

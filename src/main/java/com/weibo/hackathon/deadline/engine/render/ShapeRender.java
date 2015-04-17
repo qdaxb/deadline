@@ -1,7 +1,5 @@
 package com.weibo.hackathon.deadline.engine.render;
 
-import java.util.ArrayList;
-
 import com.weibo.hackathon.deadline.engine.model.Block;
 import com.weibo.hackathon.deadline.engine.model.Candy;
 import com.weibo.hackathon.deadline.engine.model.Element;

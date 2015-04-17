@@ -1,5 +1,7 @@
 package com.weibo.hackathon.deadline.engine.output;
 
+import java.io.IOException;
+
 import com.weibo.hackathon.deadline.engine.net.NetworkChannel;
 import com.weibo.hackathon.deadline.engine.net.NetworkManager;
 
@@ -13,9 +15,7 @@ public class NetworkOutputDevice implements OutputDevice<String>{
         this.channel = channel;
     }
     @Override
-    public void output(String data) {
+    public void output(String data) throws IOException {
         channel.send(data.toCharArray());
-        System.out.println("fff");
-
     }
 }

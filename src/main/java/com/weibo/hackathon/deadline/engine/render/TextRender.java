@@ -66,9 +66,9 @@ public class TextRender implements Render<String> {
             for (int j = 0; j < sceneArray[0].length; j++) {
                 builder.append(sceneArray[i][j]);
             }
+            builder.append('\r');
             builder.append('\n');
         }
-        builder.deleteCharAt(builder.length() - 1);
         return builder.toString();
     }
 
