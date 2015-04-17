@@ -4,9 +4,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 
+import com.weibo.hackathon.deadline.common.Location;
 import com.weibo.hackathon.deadline.engine.model.Element;
 import com.weibo.hackathon.deadline.engine.model.Layer;
-import com.weibo.hackathon.deadline.engine.model.Location;
 
 public class TextRender<T> implements Render<T> {
     private char[][] sceneArray = new char[20][80];
