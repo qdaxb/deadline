@@ -1,8 +1,6 @@
 package com.weibo.hackathon.deadline.engine.model;
 
 
-public class Player {
+public class Player extends Element {
     
-    public Location location;
-
 }
