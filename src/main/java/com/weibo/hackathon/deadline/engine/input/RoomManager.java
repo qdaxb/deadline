@@ -63,7 +63,7 @@ public class RoomManager extends Thread {
 
         while (true) {
             try {
-                Thread.sleep(100);
+                Thread.sleep(10);
                 // for (int i = 0; i < sessions.size(); i++) {
                 // sessions.get(i).getInputManager().getInputStatus();
                 // }
@@ -72,8 +72,6 @@ public class RoomManager extends Thread {
 
                 Scene scene = controller.getScene();
                 GameObject translate = ModelAdapter.translate(scene);
-
-
 
                 // h += 0.08;
                 // l1.height = (int) Math.abs((Math.sin(h)) * 5) + 1;

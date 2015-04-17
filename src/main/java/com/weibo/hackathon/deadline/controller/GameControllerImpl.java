@@ -37,19 +37,19 @@ public class GameControllerImpl implements Runnable, GameController {
         if (worker == null) {
             worker = new Thread(this);
             prepare();
-            worker.start();
-            postpare();
+            // worker.start();
+            // postpare();
         }
     }
 
-    private void postpare() {}
+//    private void postpare() {}
 
     private void prepare() {
         gameScene = new GameScene();
         actionGenerator = new RandomActionGenerator(gameScene);
         timeController = new Frame100TimeController();
         gameScene.actionGenerator = actionGenerator;
-        
+
         Player player = new Player();
         Size sceneSize = gameScene.scene.size;
         player.loc = new Location(sceneSize.width / 2, sceneSize.height / 2);
@@ -101,6 +101,7 @@ public class GameControllerImpl implements Runnable, GameController {
     @Override
     public void input(GameInput input) {
         gameScene.playerInput(input);
+        gameScene.oneStep(1);
     }
 
     @Override

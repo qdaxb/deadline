@@ -35,6 +35,6 @@ final class Frame100TimeController implements TimeController {
 
     @Override
     public boolean isPaused() {
-        return pause < 0;
+        return pause > 0;
     }
 }
