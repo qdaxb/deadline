@@ -1,13 +1,20 @@
 package com.weibo.hackathon.deadline.controller;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+
+import org.slf4j.LoggerFactory;
 
 import com.weibo.hackathon.deadline.controller.action.MoveAction;
 import com.weibo.hackathon.deadline.engine.Action;
 import com.weibo.hackathon.deadline.engine.GameResult;
 import com.weibo.hackathon.deadline.engine.input.GameInput;
+import com.weibo.hackathon.deadline.engine.model.Block;
+import com.weibo.hackathon.deadline.engine.model.Candy;
 import com.weibo.hackathon.deadline.engine.model.Element;
 import com.weibo.hackathon.deadline.engine.model.Location;
 import com.weibo.hackathon.deadline.engine.model.Player;
@@ -15,14 +22,25 @@ import com.weibo.hackathon.deadline.engine.model.Scene;
 
 public class GameScene {
 
+    public static final org.slf4j.Logger log = LoggerFactory.getLogger(GameScene.class);
+
+    private static final float OBJECT_SPEED = -0.2f;
     private static final int FORWARD = 1;
     private static final int BACKWARD = -1;
-    private static final int X_PIXAL_TU_COST = 50;
+
     Scene scene = new Scene();
     private final List<Property> objects = new LinkedList<Property>();
     Property player;
     GameResult result = null;
     ActionGenerator actionGenerator;
+    private static final Comparator<Property> xComparator = new Comparator<Property>() {
+
+        @Override
+        public int compare(Property o1, Property o2) {
+            return Integer.compare(o1.getPoint().x, o2.getPoint().x);
+        }
+    };
+    private static final float X_SPEED = OBJECT_SPEED;
 
     public Action getAction(Element elem, Class<? extends Action> c) {
         return null;
@@ -48,6 +66,89 @@ public class GameScene {
             action.perform(1);
         }
         determine();
+        dealWithBlock();
+        dealWithCandy();
+    }
+
+    private void dealWithCandy() {
+        List<Property> list = new ArrayList<Property>();
+        Iterator<Property> it = objects.iterator();
+        while (it.hasNext()) {
+            Property elem = it.next();
+            if ((elem.element instanceof Candy || elem == player) && onWay(elem)) {
+                list.add(elem);
+            }
+        }
+        Collections.sort(list, xComparator);
+        if (list.size() <= 1) {
+            return;
+        } else {
+            if (siblingCount(list) > 1) {
+                objects.remove(list.get(1));
+                player.xMove.setSpeed(X_SPEED);
+                player.xMove.steps = 10;
+                System.out.printf("meet candies: speed change to %s seconds.\r\n", X_SPEED);
+            }
+        }
+    }
+
+    private void dealWithBlock() {
+        List<Property> list = new ArrayList<Property>();
+        Iterator<Property> it = objects.iterator();
+        while (it.hasNext()) {
+            Property elem = it.next();
+            if ((elem.element instanceof Block || elem == player) && onWay(elem)) {
+                list.add(elem);
+            }
+        }
+        if (list.size() > 1) {
+            Collections.sort(list, xComparator);
+
+            int n = siblingCount(list);
+            if (n <= 1) {
+                return;
+            }
+
+            float v = 0;
+            for (int i = 0; i < n; i++) {
+                MoveAction xMove = list.get(i).xMove;
+                v += (float) xMove.speed;
+            }
+            float x = v / n;
+            System.out.printf("meet %s blocks: speed change to %s seconds.\r\n", n, x);
+            for (int i = 0; i < n; i++) {
+                MoveAction xMove = list.get(i).xMove;
+                xMove.setSpeed(x);
+            }
+        } else {
+            player.xMove.setSpeed(0); // stop
+            player.xMove.steps = 0; // not to move
+        }
+    }
+
+    private int siblingCount(List<Property> list) {
+        int c = 1;
+        for (int i = 0; i < list.size() - 1; i++) {
+            Property p1 = list.get(i);
+            Property p2 = list.get(i + 1);
+            if (p1.getPoint().x + p1.element.size.width == p2.getPoint().x) {
+                c++;
+            } else {
+                break;
+            }
+        }
+        return c;
+    }
+
+    private boolean onWay(Property p) {
+        if (p == player) {
+            return true;
+        }
+        Point pp = player.getPoint();
+        Point pe = p.getPoint();
+        boolean elementNotTooLow = pp.y < pe.y + p.element.size.height;
+        boolean elementNotTooHigh = pp.y + player.element.size.height > pe.y;
+        return pp.x <= pe.x && elementNotTooLow && elementNotTooHigh;
     }
 
     private void determine() {
@@ -123,9 +224,9 @@ public class GameScene {
 
     public void playerInput(GameInput input) {
         if (input == GameInput.UP) {
-            player.yMove.setDirection(FORWARD);
+            player.yMove.setSpeed(FORWARD);
         } else if (input == GameInput.DOWN) {
-            player.yMove.setDirection(BACKWARD);
+            player.yMove.setSpeed(BACKWARD);
         } else {
             return;
         }
@@ -146,13 +247,7 @@ public class GameScene {
             prop.disappear = false;
             prop.setPoint(new Point(loc.height, loc.width));
 
-            // prop.xMove = new MoveAction();
-            // prop.xMove.setDirection(0);
             // prop.xMove.setSpeed(X_PIXAL_TU_COST);
-            // prop.xMove.setSteps(Integer.MAX_VALUE); // infinite
-            //
-            // prop.yMove = new MoveAction();
-            // prop.yMove.setSteps(0);
 
             objects.add(prop);
             this.player = prop;
@@ -170,9 +265,8 @@ public class GameScene {
             prop.disappear = false;
             prop.setPoint(new Point(loc.width, loc.height));
 
-            prop.xMove.setDirection(BACKWARD);
-            prop.xMove.setSteps(Integer.MAX_VALUE); // infinite
-            prop.xMove.setSpeed(5);
+            prop.xMove.setSteps(Integer.MAX_VALUE);
+            prop.xMove.setSpeed(OBJECT_SPEED);
 
             prop.yMove.setSteps(0);
 
