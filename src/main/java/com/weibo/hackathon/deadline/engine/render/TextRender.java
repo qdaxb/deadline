@@ -36,7 +36,7 @@ public class TextRender implements Render<String> {
     }
 
     private char[][] buildEmptyScene() {
-        char[][] sceneArray = new char[30][100];
+        char[][] sceneArray = new char[30][80];
         for (int i = 0; i < sceneArray.length; i++) {
             for (int j = 0; j < sceneArray[0].length; j++) {
                 sceneArray[i][j] = ' ';
@@ -52,7 +52,7 @@ public class TextRender implements Render<String> {
                 boolean isWidthMatch = j >= loc.width && j < loc.width + shape[0].length;
                 if (isHeightMatch && isWidthMatch) {
                     char pixel = shape[i -  (sceneArray.length - shape.length - loc.height) - 1][j - loc.width];
-                    if (pixel != ' ') {
+                    if (pixel != ' ' && pixel != '0') {
                         sceneArray[i][j] = pixel;
                     }
                 }

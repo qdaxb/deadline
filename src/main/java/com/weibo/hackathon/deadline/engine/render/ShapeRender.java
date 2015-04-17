@@ -6,6 +6,7 @@ import com.weibo.hackathon.deadline.engine.model.Block;
 import com.weibo.hackathon.deadline.engine.model.Candy;
 import com.weibo.hackathon.deadline.engine.model.Element;
 import com.weibo.hackathon.deadline.engine.model.GameObject;
+import com.weibo.hackathon.deadline.engine.model.GameString;
 import com.weibo.hackathon.deadline.engine.model.Location;
 import com.weibo.hackathon.deadline.engine.model.Player;
 import com.weibo.hackathon.deadline.engine.model.Size;
@@ -18,16 +19,18 @@ public class ShapeRender implements Render<char[][]> {
         Element element = obj.element;
         char[][] shape = null;
         if (element instanceof Block) {
-            shape = renderBlock((Block) element);
+            shape = renderingBlock((Block) element);
         } else if (element instanceof Candy) {
-            shape = renderCandy((Candy) element);
+            shape = renderingCandy((Candy) element);
         } else if (element instanceof Player) {
-            shape = renderPlayer((Player) element);
+            shape = renderingPlayer((Player) element);
+        } else if (element instanceof GameString) {
+            shape = renderingString((GameString) element);
         }
         return shape;
     }
 
-    private char[][] renderBlock(Block block) {
+    private char[][] renderingBlock(Block block) {
         Size size = block.size;
         char[][] shape = new char[size.height][size.width];
         for (int i = 0; i < shape.length; i++) {
@@ -44,9 +47,25 @@ public class ShapeRender implements Render<char[][]> {
         return shape;
     }
 
+    private char[][] renderingString(GameString gameString) {
+        Size size = gameString.size;
+        char[] content = gameString.content.toCharArray();
+        char[][] shape = new char[size.height][size.width];
+        for (int i = 0; i < shape.length; i++) {
+            for (int j = 0; j < shape[0].length; j++) {
+                int positon = i * j + j;
+                if (positon < content.length) {
+                    shape[i][j] = content[positon];
+                }else {
+                    shape[i][j] = ' ';
+                }
+            }
+        }
+        return shape;
+    }
 
 
-    private char[][] renderCandy(Candy candy) {
+    private char[][] renderingCandy(Candy candy) {
         Size size = candy.size;
         char[][] shape = new char[size.height][size.width];
         for (int i = 0; i < shape.length; i++) {
@@ -63,7 +82,7 @@ public class ShapeRender implements Render<char[][]> {
         return shape;
     }
 
-    private char[][] renderPlayer(Player player) {
+    private char[][] renderingPlayer(Player player) {
         char[][] shape = new char[9][8];
         shape[0] = "   ...  ".toCharArray();
         shape[1] = "   ...  ".toCharArray();
@@ -81,20 +100,32 @@ public class ShapeRender implements Render<char[][]> {
     public static void main(String[] args) {
         GameObject root = new GameObject();
         Element e = new Block();
-        Size s = new Size(15, 60);
-        Location l = new Location(1, 10);
+        Size s = new Size(30, 79);
+        Location l = new Location(1, 1);
         e.size = s;
         e.loc = l;
         root.element = e;
 
         GameObject player = new GameObject();
-        Element e1 = new Player();
+        Player e1 = new Player();
         Location l1 = new Location(1, 10);
         e1.size = s;
         e1.loc = l1;
         player.element = e1;
 
         root.children.add(player);
+        player.father = root;
+        
+        GameObject string = new GameObject();
+        GameString e2 = new GameString();
+        e2.content = "Fuck";
+        e2.size = new Size(1, 9);
+        e2.loc = new Location(28, 60);
+        string.element = e2;
+        
+        root.children.add(player);
+        root.children.add(string);
+        string.father = root;
         player.father = root;
 
 
