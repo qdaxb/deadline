@@ -10,6 +10,8 @@ public class Property {
     public int speed;
 
     public Element element;
+    
+    public boolean disappear;
 
     public Point getPoint() {
         return new Point(element.loc.width, element.loc.height);
