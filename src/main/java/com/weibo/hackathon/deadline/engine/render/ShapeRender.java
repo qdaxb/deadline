@@ -1,5 +1,12 @@
 package com.weibo.hackathon.deadline.engine.render;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.weibo.hackathon.deadline.engine.model.AscIIImage;
 import com.weibo.hackathon.deadline.engine.model.Block;
 import com.weibo.hackathon.deadline.engine.model.Candy;
@@ -12,6 +19,31 @@ import com.weibo.hackathon.deadline.engine.model.Size;
 import com.weibo.hackathon.deadline.engine.utils.Util;
 
 public class ShapeRender implements Render<char[][]> {
+    public ShapeRender() {
+        gameOver = loadAscIIImageResource("./src/main/resources/gameover.img");
+        deadline = loadAscIIImageResource("./src/main/resources/deadline.img");
+    }
+
+    private char[][] loadAscIIImageResource(String filePath) {
+        File file = new File(filePath);
+        List<char[]> charList = new ArrayList<char[]>();
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            String tempString = null;
+            while ((tempString = reader.readLine()) != null) {
+                charList.add(tempString.toCharArray());
+            }
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        char[][] shape = new char[charList.size()][];
+        for (int i = 0; i < charList.size(); i++) {
+            shape[i] = charList.get(i);
+        }
+        return shape;
+    }
 
     @Override
     public char[][] render(GameObject obj) {
@@ -26,7 +58,7 @@ public class ShapeRender implements Render<char[][]> {
         } else if (element instanceof GameString) {
             shape = renderingString((GameString) element);
         } else if (element instanceof AscIIImage) {
-            shape = readeringAscIIImage();
+            shape = readeringAscIIImage((AscIIImage) element);
         } else {
 
         }
@@ -92,70 +124,22 @@ public class ShapeRender implements Render<char[][]> {
         return shape;
     }
 
-    private char[][] readeringAscIIImage() {
-        char[][] shape = new char[25][8];
-        shape[0] = "   ___  ".toCharArray();
-        shape[1] = "  / _ \\ ".toCharArray();
-        shape[2] = " / // / ".toCharArray();
-        shape[3] = "/____/_ ".toCharArray();
-        shape[4] = "  / __/ ".toCharArray();
-        shape[5] = " / _/   ".toCharArray();
-        shape[6] = "/___/_  ".toCharArray();
-        shape[7] = "  / _ | ".toCharArray();
-        shape[8] = " / __ | ".toCharArray();
-        shape[9] = "/_/_|_| ".toCharArray();
-        shape[10] = "  / _ \\ ".toCharArray();
-        shape[11] = " / // / ".toCharArray();
-        shape[12] = "/____/  ".toCharArray();
-        shape[13] = "  / /   ".toCharArray();
-        shape[14] = " / /__  ".toCharArray();
-        shape[15] = "/____/_ ".toCharArray();
-        shape[16] = "  /  _/ ".toCharArray();
-        shape[17] = " _/ /   ".toCharArray();
-        shape[18] = "/___/ __".toCharArray();
-        shape[19] = "  / |/ /".toCharArray();
-        shape[20] = " /    / ".toCharArray();
-        shape[21] = "/_/|_/_ ".toCharArray();
-        shape[22] = "  / __/ ".toCharArray();
-        shape[23] = " / _/   ".toCharArray();
-        shape[24] = "/___/   ".toCharArray();
-        return shape;
-
+    private char[][] readeringAscIIImage(AscIIImage image) {
+        switch ("") {
+            case "deadline":
+                return deadline;
+            case "gameover":
+                return gameOver;
+            default:
+                return null;
+        }
     }
 
+    private char[][] gameOver;
+    private char[][] deadline;
+
+
     public static void main(String[] args) {
-        GameObject root = new GameObject();
-        Element e = new Block();
-        Size s = new Size(30, 79);
-        Location l = new Location(1, 1);
-        e.size = s;
-        e.loc = l;
-        root.element = e;
-
-        GameObject player = new GameObject();
-        Player e1 = new Player();
-        Location l1 = new Location(1, 10);
-        e1.size = s;
-        e1.loc = l1;
-        player.element = e1;
-
-        root.children.add(player);
-        player.father = root;
-
-        GameObject string = new GameObject();
-        GameString e2 = new GameString();
-        e2.content = "Fuck";
-        e2.size = new Size(1, 9);
-        e2.loc = new Location(28, 60);
-        string.element = e2;
-
-        root.children.add(player);
-        root.children.add(string);
-        string.father = root;
-        player.father = root;
-
-
-        // Util.printArray(new ShapeRender().render(root));
-        System.out.println(new TextRender().render(root));
+        Util.printArray(new ShapeRender().gameOver);
     }
 }

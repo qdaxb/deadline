@@ -7,7 +7,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.slf4j.LoggerFactory;
 
 import com.weibo.hackathon.deadline.controller.action.MoveAction;
 import com.weibo.hackathon.deadline.engine.Action;
@@ -21,8 +20,6 @@ import com.weibo.hackathon.deadline.engine.model.Player;
 import com.weibo.hackathon.deadline.engine.model.Scene;
 
 public class GameScene {
-
-    public static final org.slf4j.Logger log = LoggerFactory.getLogger(GameScene.class);
 
     private static final float OBJECT_SPEED = -0.2f;
     private static final int FORWARD = 1;

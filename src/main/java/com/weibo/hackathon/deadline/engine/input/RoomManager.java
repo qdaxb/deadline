@@ -112,7 +112,7 @@ public class RoomManager extends Thread {
     }
 
     private void playAnimator() {
-        File file = new File("/Users/su/movie.log");
+        File file = new File("./src/main/resources/movie.ani");
         try {
             BufferedReader reader = new BufferedReader(new FileReader(file));
             String tempString = null;
