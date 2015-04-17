@@ -1,26 +1,42 @@
 package com.weibo.hackathon.deadline.engine.render;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.ArrayList;
+import java.util.concurrent.LinkedBlockingDeque;
 
-import com.weibo.hackathon.deadline.common.Location;
 import com.weibo.hackathon.deadline.engine.model.Element;
-import com.weibo.hackathon.deadline.engine.model.Layer;
+import com.weibo.hackathon.deadline.engine.model.Location;
 
-public class TextRender<T> implements Render<T> {
-    private char[][] sceneArray = new char[20][80];
-    public ArrayList<Layer> layers;
+public class TextRender implements Render<String> {
+    @Override
+    public String render(Element root) {
+        char[][] sceneArray = renderScene(root);
+        return buildSceneString(sceneArray);
+    }
+    
+    private char[][] renderScene(Element root) {
+        char[][] sceneArray = buildEmptyScene();
 
-    public void buildScene() {
-        for (Layer layer : layers) {
-            for (Element element : layer.elements) {
-                insertShape(element.shape, element.loc);
-            }
+        LinkedBlockingDeque<Element> elementQueue = new LinkedBlockingDeque<>();
+        elementQueue.add(root);
+        while (elementQueue.peek() != null) {
+            Element element = elementQueue.poll();
+            insertShape(sceneArray, element.shape, element.loc);
+            elementQueue.addAll(element.children);
         }
+
+        return sceneArray;
     }
 
-    public void insertShape(char[][] shape, Location loc) {
+    private char[][] buildEmptyScene() {
+        char[][] sceneArray = new char[20][80];
+        for (int i = 0; i < sceneArray.length; i++) {
+            for (int j = 0; j < sceneArray[0].length; j++) {
+                sceneArray[i][j] = ' ';
+            }
+        }
+        return sceneArray;
+    }
+
+    private void insertShape(char[][] sceneArray, char[][] shape, Location loc) {
         for (int i = 0; i < sceneArray.length; i++) {
             for (int j = 0; j < sceneArray[0].length; j++) {
                 boolean isHeightMatch = i >= loc.height && i < loc.height + shape.length;
@@ -32,63 +48,17 @@ public class TextRender<T> implements Render<T> {
         }
     }
 
-    public static void printArray(char[][] sceneArray) {
+    private String buildSceneString(char[][] sceneArray) {
+        StringBuilder builder = new StringBuilder();
         for (int i = 0; i < sceneArray.length; i++) {
-            for (int j = 0; j < sceneArray[0].length; j++) {
-                System.out.print(sceneArray[i][j] + " ");
-            }
-            System.out.println();
-        }
-    }
-    
-    public static void printArray(char[][] sceneArray, OutputStream stream) {
-        for (int i = 0; i < sceneArray.length; i++) {
-            StringBuilder builder = new StringBuilder();
             for (int j = 0; j < sceneArray[0].length; j++) {
                 builder.append(sceneArray[i][j] + " ");
             }
             builder.deleteCharAt(builder.length() - 1);
-            try {
-                stream.write(builder.toString().getBytes());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            builder.append('\n');
         }
+        builder.deleteCharAt(builder.length() - 1);
+        return builder.toString();
     }
-
-
-    @Override
-    public T render(Element root) {
-        buildScene();
-        return null;
-    }
-
-    public char[][] getSceneArray() {
-        return sceneArray;
-    }
-
-
-    public static void main(String[] args) {
-        char[][] sceneArray = new char[20][80];
-        for (int i = 0; i < sceneArray.length; i++) {
-            for (int j = 0; j < sceneArray[0].length; j++) {
-                sceneArray[i][j] = '_';
-            }
-        }
-
-        TextRender m = new TextRender();
-        m.sceneArray = sceneArray;
-
-        char[][] shape = new char[2][2];
-        for (int i = 0; i < shape.length; i++) {
-            for (int j = 0; j < shape[0].length; j++) {
-                shape[i][j] = '*';
-            }
-        }
-        Location loc = new Location(5, 5);
-        m.insertShape(shape, loc);
-
-        TextRender.printArray(m.sceneArray);
-    }
-
+ 
 }

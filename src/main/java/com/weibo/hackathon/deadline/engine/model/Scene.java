@@ -1,6 +1,8 @@
-package com.weibo.hackathon.deadline.common;
+package com.weibo.hackathon.deadline.engine.model;
 
 import java.util.Collection;
+
+import com.weibo.hackathon.deadline.common.Element;
 
 public class Scene {
     

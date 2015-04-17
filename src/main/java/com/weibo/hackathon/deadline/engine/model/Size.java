@@ -1,4 +1,4 @@
-package com.weibo.hackathon.deadline.common;
+package com.weibo.hackathon.deadline.engine.model;
 public class Size {
     public Size(int height, int width) {
         this.height = height;
