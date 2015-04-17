@@ -15,6 +15,7 @@ import com.weibo.hackathon.deadline.engine.input.GameInput;
 import com.weibo.hackathon.deadline.engine.model.Block;
 import com.weibo.hackathon.deadline.engine.model.Candy;
 import com.weibo.hackathon.deadline.engine.model.Element;
+import com.weibo.hackathon.deadline.engine.model.InfoElement;
 import com.weibo.hackathon.deadline.engine.model.Location;
 import com.weibo.hackathon.deadline.engine.model.Player;
 import com.weibo.hackathon.deadline.engine.model.Scene;
@@ -22,6 +23,7 @@ import com.weibo.hackathon.deadline.engine.model.Scene;
 public class GameScene {
 
     private static final float OBJECT_SPEED = -0.2f;
+    private static final float X_SPEED = 0.5f;
     private static final int FORWARD = 1;
     private static final int BACKWARD = -1;
 
@@ -37,34 +39,29 @@ public class GameScene {
             return Integer.compare(o1.getPoint().x, o2.getPoint().x);
         }
     };
-    private static final float X_SPEED = OBJECT_SPEED;
 
-    public Action getAction(Element elem, Class<? extends Action> c) {
-        return null;
-    }
-
-    public void apply(Element elem, Action act) {
-
-    }
+    private static final int TTL = 10;
 
     public void cancel() {
         result = GameResult.CANCELLED;
     }
 
-    public void oneStep(int duration) {
-        Iterator<Property> it = objects.iterator();
-        while (it.hasNext()) {
-            Property act = it.next();
-            act.xMove.perform();
-            act.yMove.perform();
+    public void oneStep() {
+        if (result == null) {
+            Iterator<Property> it = objects.iterator();
+            while (it.hasNext()) {
+                Property act = it.next();
+                act.xMove.perform();
+                act.yMove.perform();
+            }
+            while (actionGenerator.isNextAvailable()) {
+                Action action = actionGenerator.nextAction();
+                action.perform(1);
+            }
+            determine();
+            dealWithBlock();
+            dealWithCandy();
         }
-        while (actionGenerator.isNextAvailable()) {
-            Action action = actionGenerator.nextAction();
-            action.perform(1);
-        }
-        determine();
-        dealWithBlock();
-        dealWithCandy();
     }
 
     private void dealWithCandy() {
@@ -103,24 +100,33 @@ public class GameScene {
 
             int n = siblingCount(list);
             if (n <= 1) {
+                recover();
                 return;
             }
 
             float v = 0;
             for (int i = 0; i < n; i++) {
                 MoveAction xMove = list.get(i).xMove;
-                v += (float) xMove.speed;
+                v += xMove.speed;
             }
             float x = v / n;
             System.out.printf("meet %s blocks: speed change to %s seconds.\r\n", n, x);
             for (int i = 0; i < n; i++) {
-                MoveAction xMove = list.get(i).xMove;
-                xMove.setSpeed(x);
+                Property property = list.get(i);
+                property.xMove.setSpeed(x);
+                if (player == property) {
+                    property.setTTL(Integer.MAX_VALUE);
+                } else if (property.getTTL() > TTL) {
+                    property.setTTL(TTL);
+                }
             }
         } else {
-            player.xMove.setSpeed(0); // stop
-            player.xMove.steps = 0; // not to move
+            recover();
         }
+    }
+
+    private void recover() {
+        player.setSpeed(0f);
     }
 
     private int siblingCount(List<Property> list) {
@@ -175,17 +181,17 @@ public class GameScene {
                     } else {
                         Point point = prop.getPoint();
                         if (point.x < 1) {
-                            prop.disappear = true;
+                            prop.setDisappear();
                         } else if (point.x + prop.element.size.width >= scene.size.width) {
-                            prop.disappear = true;
+                            prop.setDisappear();
                         }
 
                         if (point.y < 1 - prop.element.size.height) {
-                            prop.disappear = true;
+                            prop.setDisappear();
                         } else if (point.y >= scene.size.height - 1) {
-                            prop.disappear = true;
+                            prop.setDisappear();
                         }
-                        if (prop.disappear) {
+                        if (prop.shouldDisappear()) {
                             it.remove();
                         }
                     }
@@ -204,17 +210,22 @@ public class GameScene {
 
     public Scene getScene() {
         scene.elements.clear();
-        synchronized (objects) {
-            Iterator<Property> it = objects.iterator();
-            while (it.hasNext()) {
-                Property prop = it.next();
-                prop.getPoint();
-                if (prop.disappear) {
-                    it.remove();
-                } else {
-                    scene.elements.add(prop.element);
+        if (!isOver()) {
+            synchronized (objects) {
+                Iterator<Property> it = objects.iterator();
+                while (it.hasNext()) {
+                    Property prop = it.next();
+                    prop.getPoint();
+                    if (prop.shouldDisappear()) {
+                        it.remove();
+                    } else {
+                        scene.elements.add(prop.element);
+                    }
                 }
             }
+        } else {
+            String info = result.text();
+            scene.elements.add(new InfoElement(info));
         }
         return scene;
     }
@@ -241,10 +252,8 @@ public class GameScene {
             Location loc = player.loc;
             Property prop = new Property();
             prop.element = player;
-            prop.disappear = false;
             prop.setPoint(new Point(loc.height, loc.width));
-
-            // prop.xMove.setSpeed(X_PIXAL_TU_COST);
+            prop.setTTL(Integer.MAX_VALUE);
 
             objects.add(prop);
             this.player = prop;
@@ -259,7 +268,6 @@ public class GameScene {
             Location loc = element.loc;
             Property prop = new Property();
             prop.element = element;
-            prop.disappear = false;
             prop.setPoint(new Point(loc.width, loc.height));
 
             prop.xMove.setSteps(Integer.MAX_VALUE);

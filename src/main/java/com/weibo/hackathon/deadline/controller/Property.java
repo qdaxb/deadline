@@ -6,15 +6,21 @@ import com.weibo.hackathon.deadline.engine.model.Location;
 
 public class Property {
 
-    public int weight;
-
-    public int speed;
-
     public Element element;
-
-    public boolean disappear;
-
+    
     public MoveAction xMove = new MoveAction(), yMove = new MoveAction();
+
+    public int getTTL() {
+        return xMove.steps;
+    };
+
+    public boolean shouldDisappear() {
+        return xMove.steps <= 0;
+    }
+
+    public void setDisappear() {
+        xMove.steps = 0;
+    }
 
     public Point getPoint() {
         Point point = new Point(xMove.shift, yMove.shift);
@@ -24,12 +30,16 @@ public class Property {
 
     public void setPoint(Point p) {
         element.loc = new Location(p.y, p.x);
-        // if (xMove != null) {
         xMove.shift = p.x;
-        // }
-        // if (yMove != null) {
         yMove.shift = p.y;
-        // }
+    }
+
+    public void setTTL(int ttl) {
+        xMove.steps = ttl;
+    }
+
+    public void setSpeed(float i) {
+        xMove.speed = i;
     }
 
 }
