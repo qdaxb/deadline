@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.weibo.hackathon.deadline.controller.action.MoveAction;
 import com.weibo.hackathon.deadline.engine.Action;
 import com.weibo.hackathon.deadline.engine.GameResult;
 import com.weibo.hackathon.deadline.engine.input.GameInput;
@@ -14,6 +15,8 @@ import com.weibo.hackathon.deadline.engine.model.Scene;
 
 public class GameScene {
 
+    private static final int X_BACK = -1;
+    private static final int X_PIXAL_TU_COST = 50;
     Scene scene;
     private final List<Property> objects = new LinkedList<Property>();
     Property player;
@@ -121,7 +124,7 @@ public class GameScene {
         if (input == GameInput.UP) {
             player.yMove.setDirection(1);
         } else {
-            player.yMove.setDirection(-1);
+            player.yMove.setDirection(X_BACK);
         }
         player.yMove.steps = 1;
     }
@@ -137,9 +140,20 @@ public class GameScene {
             Location loc = element.loc;
             Property prop = new Property();
             prop.element = element;
+            prop.disappear = false;
             prop.setPoint(new Point(loc.width, loc.height));
+
+            prop.xMove = new MoveAction();
+            prop.xMove.setDirection(X_BACK);
+            prop.xMove.setSpeed(X_PIXAL_TU_COST);
+            prop.xMove.setSteps(Integer.MAX_VALUE); // infinite
+
+            prop.yMove = new MoveAction();
+            prop.yMove.setSteps(0);
+
+            objects.add(prop);
         }
-        
+
     }
 
 }
