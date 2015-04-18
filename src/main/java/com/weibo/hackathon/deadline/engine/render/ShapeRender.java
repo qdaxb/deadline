@@ -22,6 +22,8 @@ public class ShapeRender implements Render<char[][]> {
     public ShapeRender() {
         gameOver = loadAscIIImageResource("./src/main/resources/gameover.img");
         deadline = loadAscIIImageResource("./src/main/resources/deadline.img");
+        success = loadAscIIImageResource("./src/main/resources/success.img");
+        cancell = loadAscIIImageResource("./src/main/resources/cancell.img");
     }
 
     private char[][] loadAscIIImageResource(String filePath) {
@@ -130,6 +132,10 @@ public class ShapeRender implements Render<char[][]> {
                 return deadline;
             case "gameover":
                 return gameOver;
+            case "success":
+                return success;
+            case "cancell":
+                return cancell;
             default:
                 return null;
         }
@@ -137,7 +143,8 @@ public class ShapeRender implements Render<char[][]> {
 
     private char[][] gameOver;
     private char[][] deadline;
-
+    private char[][] success;
+    private char[][] cancell;
 
     public static void main(String[] args) {
         Util.printArray(new ShapeRender().gameOver);
