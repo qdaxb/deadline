@@ -125,7 +125,7 @@ public class ShapeRender implements Render<char[][]> {
     }
 
     private char[][] readeringAscIIImage(AscIIImage image) {
-        switch ("") {
+        switch (image.name) {
             case "deadline":
                 return deadline;
             case "gameover":

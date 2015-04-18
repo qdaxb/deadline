@@ -43,7 +43,7 @@ public class RandomActionGenerator implements ActionGenerator {
             if (rnd.nextDouble() > 0.98) {
                 over = true;
                 return false;
-            } else if (rnd.nextDouble() > 0.98) {
+            } else {
                 Element elem = null;
                 int type = rnd.nextInt(2);
                 if (type == 0) {
@@ -56,8 +56,8 @@ public class RandomActionGenerator implements ActionGenerator {
                 elem.loc = new Location(rnd.nextInt(size.height - elem.size.height - 2) + 1, size.width - elem.size.width - 1);
                 MakeObjectAction act = new MakeObjectAction(elem, gs);
                 action = act;
+                return action != null;
             }
-            return action != null;
         }
     }
 

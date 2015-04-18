@@ -7,7 +7,7 @@ import com.weibo.hackathon.deadline.engine.model.Location;
 public class Property {
 
     public Element element;
-    
+
     public MoveAction xMove = new MoveAction(), yMove = new MoveAction();
 
     public int getTTL() {
@@ -38,8 +38,13 @@ public class Property {
         xMove.steps = ttl;
     }
 
-    public void setSpeed(float i) {
-        xMove.speed = i;
+    public void setHorizontalMovement(int mov) {
+        xMove.setMovement(mov);
+    }
+
+    public void setVerticalMovement(int mov) {
+        yMove.setMovement(mov);
+        yMove.setSteps(1);
     }
 
 }

@@ -1,14 +1,9 @@
 package com.weibo.hackathon.deadline.controller;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-
-import com.weibo.hackathon.deadline.controller.action.MoveAction;
 import com.weibo.hackathon.deadline.engine.Action;
 import com.weibo.hackathon.deadline.engine.GameResult;
 import com.weibo.hackathon.deadline.engine.input.GameInput;
@@ -22,25 +17,38 @@ import com.weibo.hackathon.deadline.engine.model.Scene;
 
 public class GameScene {
 
-    private static final float OBJECT_SPEED = -0.2f;
-    private static final float X_SPEED = 0.5f;
+    private static class RateControl {
+        private int l;
+        private int c = 0;
+
+        public RateControl(int l) {
+            this.l = l;
+        }
+
+        public boolean fulfill() {
+            c++;
+            if (c >= l) {
+                c = 0;
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
     private static final int FORWARD = 1;
+    private static final int STOP = 0;
     private static final int BACKWARD = -1;
+    private static final RateControl H = new RateControl(10), V = new RateControl(2), G = new RateControl(50);
+
+    private static final int TTL = 10;
+    private static final int CANDY_BONOUS = 5;
 
     Scene scene = new Scene();
     private final List<Property> objects = new LinkedList<Property>();
     Property player;
     GameResult result = null;
     ActionGenerator actionGenerator;
-    private static final Comparator<Property> xComparator = new Comparator<Property>() {
-
-        @Override
-        public int compare(Property o1, Property o2) {
-            return Integer.compare(o1.getPoint().x, o2.getPoint().x);
-        }
-    };
-
-    private static final int TTL = 10;
 
     public void cancel() {
         result = GameResult.CANCELLED;
@@ -48,110 +56,73 @@ public class GameScene {
 
     public void oneStep() {
         if (result == null) {
-            Iterator<Property> it = objects.iterator();
-            while (it.hasNext()) {
-                Property act = it.next();
-                act.xMove.perform();
-                act.yMove.perform();
+            if (H.fulfill()) {
+                Iterator<Property> it = objects.iterator();
+                while (it.hasNext()) {
+                    Property act = it.next();
+                    act.xMove.perform();
+                }
+                player.xMove.perform();
+                if (xForward > 0) {
+                    player.xMove.perform();
+                    xForward--;
+                }
             }
-            while (actionGenerator.isNextAvailable()) {
+            if (V.fulfill()) {
+                Iterator<Property> it = objects.iterator();
+                while (it.hasNext()) {
+                    Property act = it.next();
+                    act.yMove.perform();
+                }
+                player.yMove.perform();
+            }
+            if (G.fulfill() && actionGenerator.isNextAvailable()) {
                 Action action = actionGenerator.nextAction();
                 action.perform(1);
             }
+            deal();
             determine();
-            dealWithBlock();
-            dealWithCandy();
         }
     }
 
-    private void dealWithCandy() {
-        List<Property> list = new ArrayList<Property>();
+    private Property findAdjacentObject() {
         Iterator<Property> it = objects.iterator();
         while (it.hasNext()) {
             Property elem = it.next();
-            if ((elem.element instanceof Candy || elem == player) && onWay(elem)) {
-                list.add(elem);
-            }
-        }
-        Collections.sort(list, xComparator);
-        if (list.size() <= 1) {
-            return;
-        } else {
-            if (siblingCount(list) > 1) {
-                objects.remove(list.get(1));
-                player.xMove.setSpeed(X_SPEED);
-                player.xMove.steps = 10;
-                System.out.printf("meet candies: speed change to %s seconds.\r\n", X_SPEED);
-            }
-        }
-    }
-
-    private void dealWithBlock() {
-        List<Property> list = new ArrayList<Property>();
-        Iterator<Property> it = objects.iterator();
-        while (it.hasNext()) {
-            Property elem = it.next();
-            if ((elem.element instanceof Block || elem == player) && onWay(elem)) {
-                list.add(elem);
-            }
-        }
-        if (list.size() > 1) {
-            Collections.sort(list, xComparator);
-
-            int n = siblingCount(list);
-            if (n <= 1) {
-                recover();
-                return;
-            }
-
-            float v = 0;
-            for (int i = 0; i < n; i++) {
-                MoveAction xMove = list.get(i).xMove;
-                v += xMove.speed;
-            }
-            float x = v / n;
-            System.out.printf("meet %s blocks: speed change to %s seconds.\r\n", n, x);
-            for (int i = 0; i < n; i++) {
-                Property property = list.get(i);
-                property.xMove.setSpeed(x);
-                if (player == property) {
-                    property.setTTL(Integer.MAX_VALUE);
-                } else if (property.getTTL() > TTL) {
-                    property.setTTL(TTL);
+            Property p = elem;
+            if (p == player) {
+                continue;
+            } else {
+                Point piontPlayer = player.getPoint();
+                Point pointObject = p.getPoint();
+                boolean elementNotTooLow = piontPlayer.y < pointObject.y + p.element.size.height;
+                boolean elementNotTooHigh = piontPlayer.y + player.element.size.height > pointObject.y;
+                if (piontPlayer.x <= pointObject.x && piontPlayer.x + player.element.size.width >= pointObject.x && elementNotTooLow
+                        && elementNotTooHigh) {
+                    return (elem);
                 }
             }
-        } else {
-            recover();
         }
+        return null;
     }
 
-    private void recover() {
-        player.setSpeed(0f);
-    }
+    private int xForward = 0;
 
-    private int siblingCount(List<Property> list) {
-        int c = 1;
-        for (int i = 0; i < list.size() - 1; i++) {
-            Property p1 = list.get(i);
-            Property p2 = list.get(i + 1);
-            if (p1.getPoint().x + p1.element.size.width == p2.getPoint().x) {
-                c++;
-            } else {
-                break;
+    private void deal() {
+        Property adj = findAdjacentObject();
+        if (adj == null) {
+            if (xForward <= 0) {
+                player.xMove.setMovement(STOP);
             }
+            return;
+        } else if (adj.element instanceof Block) {
+            player.xMove.setMovement(BACKWARD);
+            adj.setTTL(TTL);
+        } else if (adj.element instanceof Candy) {
+            player.xMove.setMovement(FORWARD);
+            adj.setTTL(0);
+            xForward = CANDY_BONOUS;
         }
-        return c;
-    }
-
-    private boolean onWay(Property p) {
-        if (p == player) {
-            return true;
-        }
-        Point pp = player.getPoint();
-        Point pe = p.getPoint();
-        boolean elementNotTooLow = pp.y < pe.y + p.element.size.height;
-        boolean elementNotTooHigh = pp.y + player.element.size.height > pe.y;
-        return pp.x <= pe.x && elementNotTooLow && elementNotTooHigh;
     }
 
     private void determine() {
@@ -162,23 +133,6 @@ public class GameScene {
                 Iterator<Property> it = objects.iterator();
                 while (it.hasNext()) {
                     Property prop = it.next();
-                    if (prop.element instanceof Player) {
-                        Point point = prop.getPoint();
-                        if (point.x < 1) {
-                            fail();
-                        } else if (point.x + prop.element.size.width >= scene.size.width) {
-                            point.x = scene.size.width - prop.element.size.width - 1;
-                            prop.setPoint(point);
-                        }
-
-                        if (point.y < 1) {
-                            point.y = 1;
-                            prop.setPoint(point);
-                        } else if (point.y + prop.element.size.height >= scene.size.height) {
-                            point.y = scene.size.height - prop.element.size.height - 1;
-                            prop.setPoint(point);
-                        }
-                    } else {
                         Point point = prop.getPoint();
                         if (point.x < 1) {
                             prop.setDisappear();
@@ -194,7 +148,21 @@ public class GameScene {
                         if (prop.shouldDisappear()) {
                             it.remove();
                         }
-                    }
+                }
+                Point point = player.getPoint();
+                if (point.x < 1) {
+                    fail();
+                } else if (point.x + player.element.size.width >= scene.size.width) {
+                    point.x = scene.size.width - player.element.size.width - 1;
+                    player.setPoint(point);
+                }
+                
+                if (point.y < 1) {
+                    point.y = 1;
+                    player.setPoint(point);
+                } else if (point.y + player.element.size.height >= scene.size.height) {
+                    point.y = scene.size.height - player.element.size.height - 1;
+                    player.setPoint(point);
                 }
             }
         }
@@ -222,23 +190,23 @@ public class GameScene {
                         scene.elements.add(prop.element);
                     }
                 }
+                player.getPoint();
+                scene.elements.add(player.element);
             }
         } else {
-            String info = result.text();
-            scene.elements.add(new InfoElement(info));
+            scene.elements.add(new InfoElement(result));
         }
         return scene;
     }
 
     public void playerInput(GameInput input) {
         if (input == GameInput.UP) {
-            player.yMove.setSpeed(FORWARD);
+            player.setVerticalMovement(FORWARD);
         } else if (input == GameInput.DOWN) {
-            player.yMove.setSpeed(BACKWARD);
+            player.setVerticalMovement(BACKWARD);
         } else {
             return;
         }
-        player.yMove.steps = 1;
     }
 
     public boolean isOver() {
@@ -253,9 +221,8 @@ public class GameScene {
             Property prop = new Property();
             prop.element = player;
             prop.setPoint(new Point(loc.height, loc.width));
+            prop.xMove.setMovement(STOP);
             prop.setTTL(Integer.MAX_VALUE);
-
-            objects.add(prop);
             this.player = prop;
         }
 
@@ -271,7 +238,7 @@ public class GameScene {
             prop.setPoint(new Point(loc.width, loc.height));
 
             prop.xMove.setSteps(Integer.MAX_VALUE);
-            prop.xMove.setSpeed(OBJECT_SPEED);
+            prop.xMove.setMovement(BACKWARD);
 
             prop.yMove.setSteps(0);
 

@@ -53,7 +53,7 @@ public class GameControllerImpl implements Runnable, GameController {
         Player player = new Player();
         Size sceneSize = gameScene.scene.size;
         player.loc = new Location(sceneSize.width / 2, sceneSize.height / 2);
-        player.size = new Size(5, 3);
+        player.size = new Size(9, 8);
         gameScene.setPlayer(player);
     }
 

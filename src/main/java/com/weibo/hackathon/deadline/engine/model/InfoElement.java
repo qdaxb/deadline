@@ -1,10 +1,12 @@
 package com.weibo.hackathon.deadline.engine.model;
 
+import com.weibo.hackathon.deadline.engine.GameResult;
+
 public class InfoElement extends Element {
     
-    public String info;
+    public GameResult info;
 
-    public InfoElement(String info) {
+    public InfoElement(GameResult info) {
         super();
         this.info = info;
     }

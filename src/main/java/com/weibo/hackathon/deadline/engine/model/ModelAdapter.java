@@ -5,9 +5,9 @@ import java.util.ArrayList;
 public class ModelAdapter {
 
     private static final class EmptyElement extends Element {
-//        public EmptyElement() {
-//            loc = new Location(0, 0);
-//        }
+        // public EmptyElement() {
+        // loc = new Location(0, 0);
+        // }
     }
 
     public static GameObject translate(final Scene scene) {
@@ -20,14 +20,22 @@ public class ModelAdapter {
         for (Element elem : scene.elements) {
             GameObject ge = new GameObject();
             ge.father = go;
-            ge.element = elem;
             go.children.add(ge);
+            if (elem instanceof InfoElement) {
+                AscIIImage asc = new AscIIImage();
+                ge.element = asc;
+                asc.name = ((InfoElement) elem).info.text();
+            } else {
+                ge.element = elem;
+            }
         }
         GameObject root = new GameObject();
         root.element = new EmptyElement();
         GameObject deadline = new GameObject();
         deadline.father = root;
-        deadline.element = new AscIIImage();
+        AscIIImage ascIIImage = new AscIIImage();
+        ascIIImage.name = "deadline";
+        deadline.element = ascIIImage;
         deadline.element.loc = new Location(4, 1);
         root.children.add(deadline);
         go.father = root;
