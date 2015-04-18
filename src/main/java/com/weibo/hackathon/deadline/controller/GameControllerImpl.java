@@ -55,7 +55,7 @@ public class GameControllerImpl implements GameController {
         Player player = new Player();
         Size sceneSize = gameScene.scene.size;
         player.loc = new Location(sceneSize.width / 2, sceneSize.height / 2);
-        player.size = new Size(9, 8);
+        player.size = new Size(3, 3);
         gameScene.setPlayer(player);
         gameScene.setSwitcher(sw);
     }
