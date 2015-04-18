@@ -14,11 +14,13 @@ public class PipeActionGenerator implements ActionGenerator {
 
     public class ReportResultAction implements Action {
 
+        private final GameScene gs;
         GameResult result;
 
-        public ReportResultAction(GameResult result) {
+        public ReportResultAction(GameResult result,GameScene gs) {
             super();
             this.result = result;
+            this.gs = gs;
         }
 
         @Override
@@ -28,7 +30,9 @@ public class PipeActionGenerator implements ActionGenerator {
                 gs.cancel();
             } else if (result == GameResult.SUCCESS) {
                 gs.fail();
+                System.out.println(gs.getName() + "fail");
             } else if (result == GameResult.FAIL) {
+                System.out.println(gs.getName()+"succ");
                 gs.success();
             }
             if (another != null) {
@@ -66,7 +70,7 @@ public class PipeActionGenerator implements ActionGenerator {
     }
 
     public void reportResult(GameResult result) {
-        another.actions.add(new ReportResultAction(result));
+        another.actions.add(new ReportResultAction(result,another.gs));
     }
 
     private void makeBlockAction() {

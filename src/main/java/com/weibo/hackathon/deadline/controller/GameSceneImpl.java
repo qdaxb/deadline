@@ -19,6 +19,20 @@ import com.weibo.hackathon.deadline.engine.model.Scene;
 import com.weibo.hackathon.deadline.engine.model.TrickyCandy;
 
 public class GameSceneImpl implements GameScene {
+    private String name ;
+    private RateControl event = new RateControl(1);
+
+    public GameSceneImpl(String name) {
+        this.name=name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public static class Switcher {
 
@@ -74,7 +88,7 @@ public class GameSceneImpl implements GameScene {
     private static final int FORWARD = 1;
     private static final int STOP = 0;
     private static final int BACKWARD = -1;
-    private final RateControl H = new RateControl(10), V = new RateControl(2), G = new RateControl(50);
+    private final RateControl H = new RateControl(10), V = new RateControl(2), G = new RateControl(40);
 
     private static final int TTL = 10;
     private static final int CANDY_BONOUS = 5;
@@ -84,6 +98,8 @@ public class GameSceneImpl implements GameScene {
     Property player;
     GameResult result = null;
     ActionGenerator actionGenerator;
+
+    ActionGenerator eventActionGenerator;
 
     /*
      * (non-Javadoc)
@@ -119,6 +135,10 @@ public class GameSceneImpl implements GameScene {
             }
             if (G.fulfill() && actionGenerator.isNextAvailable()) {
                 Action action = actionGenerator.nextAction();
+                action.perform();
+            }
+            if ( eventActionGenerator.isNextAvailable()) {
+                Action action = eventActionGenerator.nextAction();
                 action.perform();
             }
             deal();
@@ -176,7 +196,7 @@ public class GameSceneImpl implements GameScene {
     private void determine() {
         synchronized (objects) {
             if (objects.size() == 1 && actionGenerator.isOver()) {
-                result = GameResult.SUCCESS;
+                //result = GameResult.SUCCESS;
             } else {
                 Iterator<Property> it = objects.iterator();
                 while (it.hasNext()) {
@@ -228,6 +248,7 @@ public class GameSceneImpl implements GameScene {
 
     private void makeResult(GameResult r) {
         result = r;
+
         if(pipe != null) {
             pipe.reportResult(result);
         }

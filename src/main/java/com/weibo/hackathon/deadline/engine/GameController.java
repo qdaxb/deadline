@@ -7,8 +7,7 @@ import com.weibo.hackathon.deadline.engine.model.Scene;
 
 public interface GameController {
     
-    public void init();
-    
+
     public void input(GameInput input);
     
     public void setGameEngine(GameEngine engine);
@@ -18,6 +17,8 @@ public interface GameController {
     public abstract void resume();
 
     public abstract void pause();
+
+    void init(String name);
 
     public abstract void stop();
 

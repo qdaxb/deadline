@@ -6,6 +6,7 @@ import com.weibo.hackathon.deadline.engine.model.Scene;
 
 
 public interface GameScene {
+    public String getName();
 
     public abstract void cancel();
 

@@ -35,9 +35,9 @@ public class GameControllerImpl implements GameController {
     public Switcher sw = new Switcher();
 
     @Override
-    public synchronized void init() {
+    public synchronized void init(String name) {
         if (!prepared) {
-            prepare1();
+            prepare1(name);
             prepared = true;
         }
     }
@@ -46,8 +46,8 @@ public class GameControllerImpl implements GameController {
 
     private GameControllerImpl peer;
 
-    private void prepare1() {
-        gameScene = new GameSceneImpl();
+    private void prepare1(String name) {
+        gameScene = new GameSceneImpl(name);
         actionGenerator = new AggregateActionGenerator();
         actionGenerator.generators.add(new RandomActionGenerator(gameScene));
         gameScene.actionGenerator = actionGenerator;
@@ -100,8 +100,11 @@ public class GameControllerImpl implements GameController {
             pag2 = new PipeActionGenerator();
             pag1.pipeWith(pag2);
             
-            actionGenerator.generators.add(0, pag1);
-            actionGenerator.generators.add(0, pag2);
+            //actionGenerator.generators.add(0, pag1);
+            //actionGenerator.generators.add(0, pag2);
+
+            gameScene.eventActionGenerator = pag1;
+            gci.gameScene.eventActionGenerator = pag2;
 
             pag1.gs = gameScene;
             pag2.gs = gci.gameScene;

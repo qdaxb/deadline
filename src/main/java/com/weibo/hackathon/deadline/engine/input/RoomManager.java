@@ -72,8 +72,8 @@ public class RoomManager extends Thread {
         List<GameController> gcl = new ArrayList<GameController>(sessions.size());
         GameControllerImpl ctl1 = new GameControllerImpl();
         GameControllerImpl ctl2 = new GameControllerImpl();
-        ctl1.init();
-        ctl2.init();
+        ctl1.init("player1");
+        ctl2.init("player2");
         gcl.add(ctl1);
         gcl.add(ctl2);
         
@@ -83,7 +83,6 @@ public class RoomManager extends Thread {
             try {
                 for (int i = 0; i < sessions.size(); i++) {
                     GameController controller = gcl.get(i);
-                    controller.init();
                     Thread.sleep(10);
                     // for (int i = 0; i < sessions.size(); i++) {
                     // sessions.get(i).getInputManager().getInputStatus();
