@@ -1,30 +1,24 @@
 package com.weibo.hackathon.deadline.controller.action;
 
-import com.weibo.hackathon.deadline.controller.GameScene;
+import com.weibo.hackathon.deadline.controller.GameSceneImpl;
 import com.weibo.hackathon.deadline.engine.Action;
 import com.weibo.hackathon.deadline.engine.model.Element;
 
 public class MakeObjectAction implements Action {
 
     Element element;
-    GameScene gs;
-    boolean active = true;
+    GameSceneImpl gs;
 
-    public MakeObjectAction(Element element, GameScene gs) {
+    public MakeObjectAction(Element element, GameSceneImpl gs) {
         super();
         this.element = element;
         this.gs = gs;
     }
 
     @Override
-    public void perform(int frames) {
+    public void perform() {
         gs.addElement(element);
-        active = false;
     }
 
-    @Override
-    public boolean active() {
-        return active;
-    }
 
 }

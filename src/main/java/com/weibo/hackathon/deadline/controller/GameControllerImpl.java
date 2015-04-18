@@ -3,6 +3,8 @@ package com.weibo.hackathon.deadline.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.weibo.hackathon.deadline.controller.GameSceneImpl.Switcher;
+import com.weibo.hackathon.deadline.controller.action.PipeActionGenerator;
 import com.weibo.hackathon.deadline.engine.GameController;
 import com.weibo.hackathon.deadline.engine.GameEngine;
 import com.weibo.hackathon.deadline.engine.input.GameInput;
@@ -11,9 +13,7 @@ import com.weibo.hackathon.deadline.engine.model.Player;
 import com.weibo.hackathon.deadline.engine.model.Scene;
 import com.weibo.hackathon.deadline.engine.model.Size;
 
-public class GameControllerImpl implements Runnable, GameController {
-
-    private static final long REFRESH_INTERVAL = 100;
+public class GameControllerImpl implements GameController {
 
     private static final Map<GameInput, Integer> STRAIGHT_SPEED = new HashMap<GameInput, Integer>();
 
@@ -24,30 +24,32 @@ public class GameControllerImpl implements Runnable, GameController {
 
     Thread worker;
 
-    ActionGenerator actionGenerator;
+    AggregateActionGenerator actionGenerator;
 
-    GameScene gameScene;
+    GameSceneImpl gameScene;
 
     private GameEngine engine;
 
-    TimeController timeController;
+    private boolean prepared = false;
+
+    public Switcher sw = new Switcher();
 
     @Override
     public synchronized void init() {
-        if (worker == null) {
-            worker = new Thread(this);
-            prepare();
-            // worker.start();
-            // postpare();
+        if (!prepared) {
+            prepare1();
+            prepared = true;
         }
     }
 
-    // private void postpare() {}
+    private int players = 1;
 
-    private void prepare() {
-        gameScene = new GameScene();
-        actionGenerator = new RandomActionGenerator(gameScene);
-        timeController = new Frame100TimeController();
+    private GameControllerImpl peer;
+
+    private void prepare1() {
+        gameScene = new GameSceneImpl();
+        actionGenerator = new AggregateActionGenerator();
+        actionGenerator.generators.add(new RandomActionGenerator(gameScene));
         gameScene.actionGenerator = actionGenerator;
 
         Player player = new Player();
@@ -55,6 +57,7 @@ public class GameControllerImpl implements Runnable, GameController {
         player.loc = new Location(sceneSize.width / 2, sceneSize.height / 2);
         player.size = new Size(9, 8);
         gameScene.setPlayer(player);
+        gameScene.setSwitcher(sw);
     }
 
     @Override
@@ -64,38 +67,12 @@ public class GameControllerImpl implements Runnable, GameController {
 
     @Override
     public void pause() {
-        timeController.pause();
+        sw.turnOff();
     }
 
     @Override
     public void resume() {
-        timeController.resume();
-    }
-
-    private boolean isOver() {
-        return gameScene.isOver();
-    }
-
-    private boolean isPaused() {
-        return timeController.isPaused();
-    }
-
-    public int timeEllapse() {
-        return timeController.timeInterval();
-    }
-
-    public void mainLoop() {
-        while (!isOver()) {
-            if (!isPaused()) {
-                int duration = timeEllapse();
-                if (duration > 0) {
-                    gameScene.oneStep();
-                }
-            }
-            try {
-                Thread.sleep(REFRESH_INTERVAL);
-            } catch (InterruptedException e) {}
-        }
+        sw.turnOn();
     }
 
     @Override
@@ -104,8 +81,37 @@ public class GameControllerImpl implements Runnable, GameController {
         gameScene.oneStep();
     }
 
+    @Override
     public void oneframe() {
         gameScene.oneStep();
+        if (peer != null) {
+            peer.gameScene.oneStep();
+        }
+    }
+
+    @Override
+    public void connect(GameController gc) {
+        if (gc instanceof GameControllerImpl) {
+            GameControllerImpl gci = (GameControllerImpl) gc;
+            gci.gameScene.setSwitcher(sw);
+
+            PipeActionGenerator pag1, pag2;
+            pag1 = new PipeActionGenerator();
+            pag2 = new PipeActionGenerator();
+            pag1.pipeWith(pag2);
+            
+            actionGenerator.generators.add(0, pag1);
+            actionGenerator.generators.add(0, pag2);
+
+            pag1.gs = gameScene;
+            pag2.gs = gci.gameScene;
+
+            gameScene.pipe = pag1;
+            gci.gameScene.pipe = pag2;
+
+            peer = gci;
+            gci.peer = this;
+        }
     }
 
     @Override
@@ -118,13 +124,18 @@ public class GameControllerImpl implements Runnable, GameController {
         this.engine = engine;
     }
 
-    @Override
-    public void run() {
-        mainLoop();
-    }
-
     public GameEngine getEngine() {
         return engine;
+    }
+
+    @Override
+    public int getPlayers() {
+        return players;
+    }
+
+    @Override
+    public void setPlayers(int players) {
+        this.players = players;
     }
 
 }

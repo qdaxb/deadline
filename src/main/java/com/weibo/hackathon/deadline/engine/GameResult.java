@@ -1,10 +1,9 @@
 package com.weibo.hackathon.deadline.engine;
 
 public enum GameResult {
-    FAIL("gameover"), SUCCESS("gameover"), CANCELLED("cancelled");
+    FAIL("gameover"), SUCCESS("success"), CANCELLED("cancelled");
 
     public String text() {
-        // TODO Auto-generated method stub
         return this.text;
     }
 
