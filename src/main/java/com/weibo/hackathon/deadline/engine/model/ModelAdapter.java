@@ -25,6 +25,7 @@ public class ModelAdapter {
                 AscIIImage asc = new AscIIImage();
                 ge.element = asc;
                 asc.name = ((InfoElement) elem).info.text();
+                asc.loc = new Location(10, 20);
             } else {
                 ge.element = elem;
             }

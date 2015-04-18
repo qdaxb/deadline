@@ -12,13 +12,15 @@ import com.weibo.hackathon.deadline.engine.model.Size;
 
 public class RandomActionGenerator implements ActionGenerator {
 
-    GameScene gs;
+    GameSceneImpl gs;
     public static Random rnd = new Random();
 
-    public RandomActionGenerator(GameScene gs) {
+    public RandomActionGenerator(GameSceneImpl gs) {
         super();
         this.gs = gs;
     }
+
+    public boolean randX = false;
 
     Action action = null;
     boolean over = false;
@@ -53,7 +55,12 @@ public class RandomActionGenerator implements ActionGenerator {
                 }
                 elem.size = new Size(rnd.nextInt(5) + 1, rnd.nextInt(5) + 1);
                 Size size = gs.getScene().size;
-                elem.loc = new Location(rnd.nextInt(size.height - elem.size.height - 2) + 1, size.width - elem.size.width - 1);
+                int height = rnd.nextInt(size.height - elem.size.height - 2) + 1;
+                int width = size.width - elem.size.width - 1;
+                if (randX) {
+                    width = rnd.nextInt(width - 1) + 1;
+                }
+                elem.loc = new Location(height, width);
                 MakeObjectAction act = new MakeObjectAction(elem, gs);
                 action = act;
                 return action != null;
