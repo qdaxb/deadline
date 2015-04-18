@@ -113,16 +113,10 @@ public class ShapeRender implements Render<char[][]> {
     }
 
     private char[][] renderingPlayer(Player player) {
-        char[][] shape = new char[9][8];
-        shape[0] = "   ...  ".toCharArray();
-        shape[1] = "   ...  ".toCharArray();
-        shape[2] = "    .   ".toCharArray();
-        shape[3] = "   ...  ".toCharArray();
-        shape[4] = "  . . . ".toCharArray();
-        shape[5] = "    .   ".toCharArray();
-        shape[6] = "    .   ".toCharArray();
-        shape[7] = "   . .  ".toCharArray();
-        shape[8] = "  .   . ".toCharArray();
+        char[][] shape = new char[3][3];
+        shape[0] = " @ ".toCharArray();
+        shape[1] = " | ".toCharArray();
+        shape[2] = "/ \\".toCharArray();
         return shape;
     }
 
