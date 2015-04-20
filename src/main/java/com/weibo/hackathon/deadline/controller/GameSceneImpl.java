@@ -88,7 +88,7 @@ public class GameSceneImpl implements GameScene {
     private static final int FORWARD = 1;
     private static final int STOP = 0;
     private static final int BACKWARD = -1;
-    private final RateControl H = new RateControl(10), V = new RateControl(2), G = new RateControl(40);
+    private final RateControl H = new RateControl(10), V = new RateControl(2), G = new RateControl(20);
 
     private static final int TTL = 10;
     private static final int CANDY_BONOUS = 5;

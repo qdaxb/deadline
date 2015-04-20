@@ -47,8 +47,8 @@ public class RandomActionGenerator implements ActionGenerator {
                 return false;
             } else {
                 Element elem = null;
-                int type = rnd.nextInt(2);
-                if (type == 0) {
+                int type = rnd.nextInt(20);
+                if (type != 0) {
                     elem = new Block();
                 } else {
                     elem = new Candy();
