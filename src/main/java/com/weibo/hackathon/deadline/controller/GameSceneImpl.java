@@ -89,7 +89,7 @@ public class GameSceneImpl implements GameScene {
     private static final int FORWARD = 1;
     private static final int STOP = 0;
     private static final int BACKWARD = -1;
-    private final RateControl H = new RateControl(1), V = new RateControl(1), G = new RateControl(2);
+    private final RateControl H = new RateControl(1), V = new RateControl(1), G = new RateControl(1);
 
     private static final int TTL = 10;
     private static final int CANDY_BONOUS = 5;
@@ -343,7 +343,7 @@ public class GameSceneImpl implements GameScene {
             prop.setPoint(new Point(loc.width, loc.height));
 
             prop.xMove.setSteps(Integer.MAX_VALUE);
-            prop.xMove.setMovement(BACKWARD);
+            prop.xMove.setMovement(BACKWARD-1);
 
             prop.yMove.setSteps(0);
 

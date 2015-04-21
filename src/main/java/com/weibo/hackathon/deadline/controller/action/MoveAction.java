@@ -15,7 +15,7 @@ public class MoveAction {
      * @param mov
      */
     public void setMovement(int mov) {
-        this.speed = mov > 0 ? 1 : (mov == 0 ? 0 : -1);
+        this.speed = mov ;
     }
 
     public void perform() {
