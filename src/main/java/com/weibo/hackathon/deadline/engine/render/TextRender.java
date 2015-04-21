@@ -54,7 +54,7 @@ public class TextRender implements Render<String> {
                 boolean isWidthMatch = j >= loc.width && j < loc.width + shape[0].length;
                 if (isHeightMatch && isWidthMatch) {
                     char pixel = shape[i - (sceneArray.length - shape.length - loc.height) - 1][j - loc.width];
-                    if (pixel != ' ' && pixel != '0') {
+                    if (pixel != ' ' ) {
                         sceneArray[i][j] = pixel;
                     }
                 }

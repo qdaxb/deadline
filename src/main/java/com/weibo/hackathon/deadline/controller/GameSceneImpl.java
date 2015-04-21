@@ -245,16 +245,15 @@ public class GameSceneImpl implements GameScene {
      */
     @Override
     public void fail() {
-        makeResult(GameResult.FAIL);
+        GameResult gameResult = GameResult.FAIL.clone();
+        gameResult.setTime(gameTime);
+        makeResult(gameResult);
     }
 
     private void makeResult(GameResult r) {
         result = r;
-        GameResult clonedResult = r.clone();
-        clonedResult.setTime(gameTime);
-
         if(pipe != null) {
-            pipe.reportResult(clonedResult);
+            pipe.reportResult(result);
         }
     }
 
@@ -360,7 +359,9 @@ public class GameSceneImpl implements GameScene {
      */
     @Override
     public void success() {
-        makeResult(GameResult.SUCCESS);
+        GameResult gameResult = GameResult.SUCCESS.clone();
+        gameResult.setTime(gameTime);
+        makeResult(gameResult);
     }
 
 }

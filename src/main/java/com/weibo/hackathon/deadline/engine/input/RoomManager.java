@@ -24,59 +24,11 @@ public class RoomManager extends Thread {
         if (sessions.size() == 1) {
             //playAnimator();
         }
-        // GameObject root = new GameObject();
-        // Element e = new Block();
-        // Size s = new Size(30, 69);
-        // Location l = new Location(1, 10);
-        // e.size = s;
-        // e.loc = l;
-        // root.element = e;
-        //
-        // GameObject player = new GameObject();
-        // Player e1 = new Player();
-        // Location l1 = new Location(1, 10);
-        // e1.size = s;
-        // e1.loc = l1;
-        // player.element = e1;
-        //
-        // GameObject asc = new GameObject();
-        // AscIIImage image = new AscIIImage();
-        // Location l2 = new Location(4, -9);
-        // image.size = s;
-        // image.loc = l2;
-        // asc.element = image;
-        //
-        //
-        // root.children.add(player);
-        // root.children.add(asc);
-        // asc.father = root;
-        // player.father = root;
-        //
-        // GameObject string = new GameObject();
-        // GameString e2 = new GameString();
-        // e2.content = "Joking";
-        // e2.size = new Size(1, 9);
-        // e2.loc = new Location(28, 60);
-        // string.element = e2;
-        //
-        // root.children.add(player);
-        // root.children.add(string);
-        // string.father = root;
-        // player.father = root;
-        // double h = 0;
-        // int w = 0;
 
-        List<GameController> gcl = new ArrayList<GameController>(sessions.size());
-        GameControllerImpl ctl1 = new GameControllerImpl();
-        GameControllerImpl ctl2 = new GameControllerImpl();
-        ctl1.init("player1");
-        ctl2.init("player2");
-        gcl.add(ctl1);
-        gcl.add(ctl2);
-        
-        ctl1.connect(ctl2);
+        List<GameController> gcl = createGameControllers();
 
-        while (true) {
+
+        outer:while (true) {
             try {
                 Thread.sleep(100);
                 for (int i = 0; i < sessions.size(); i++) {
@@ -87,7 +39,11 @@ public class RoomManager extends Thread {
                     GameSession gameSession = sessions.get(i);
                     GameInput input = gameSession.getInputManager().getInputStatus();
 
-                    if(controller.isOver()) {
+                    if(controller.isOver() ) {
+                        if(input == GameInput.RESTART && sessions.size() == 1 ) {
+                            gcl = createGameControllers();
+                            continue outer;
+                        }
                         continue;
                     }
                     controller.input(input);
@@ -113,6 +69,19 @@ public class RoomManager extends Thread {
             }
         }
 
+    }
+
+    private List<GameController> createGameControllers() {
+        List<GameController> gcl = new ArrayList<GameController>(sessions.size());
+        for(int i=0;i<2;i++) {
+            GameControllerImpl ctl1 = new GameControllerImpl();
+            ctl1.init("player" + i);
+            gcl.add(ctl1);
+        }
+        if (gcl.size()>1) {
+            gcl.get(0).connect(gcl.get(1));
+        }
+        return gcl;
     }
 
     private void playAnimator() {

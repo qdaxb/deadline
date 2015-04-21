@@ -26,6 +26,15 @@ public class ModelAdapter {
                 ge.element = asc;
                 asc.name = ((InfoElement) elem).info.text();
                 asc.loc = new Location(10, 20);
+                GameObject obj = new GameObject();
+                GameString gameString = new GameString();
+                gameString.content = "alive time:"+((InfoElement) elem).info.getTime();
+                System.out.println(gameString.content);
+                gameString.loc = new Location(8,28);
+                gameString.size = new Size(1,20);
+                obj.element = gameString;
+                obj.father = go;
+                go.children.add(obj);
             } else {
                 ge.element = elem;
             }

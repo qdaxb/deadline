@@ -30,6 +30,8 @@ public class NetworkInput implements InputManager {
                     input = GameInput.DOWN;
                 } else if (key == 'k') {
                     input = GameInput.UP;
+                } else if (key == 'r') {
+                    input = GameInput.RESTART;
                 }
             }
         } catch (Exception e) {
