@@ -1,9 +1,6 @@
 package com.weibo.hackathon.deadline.engine.input;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +22,7 @@ public class RoomManager extends Thread {
     @Override
     public void run() {
         if (sessions.size() == 1) {
-            playAnimator();
+            //playAnimator();
         }
         // GameObject root = new GameObject();
         // Element e = new Block();
@@ -81,14 +78,18 @@ public class RoomManager extends Thread {
 
         while (true) {
             try {
+                Thread.sleep(100);
                 for (int i = 0; i < sessions.size(); i++) {
                     GameController controller = gcl.get(i);
-                    Thread.sleep(10);
                     // for (int i = 0; i < sessions.size(); i++) {
                     // sessions.get(i).getInputManager().getInputStatus();
                     // }
                     GameSession gameSession = sessions.get(i);
                     GameInput input = gameSession.getInputManager().getInputStatus();
+
+                    if(controller.isOver()) {
+                        continue;
+                    }
                     controller.input(input);
 
                     Scene scene = controller.getScene();
@@ -115,9 +116,8 @@ public class RoomManager extends Thread {
     }
 
     private void playAnimator() {
-        File file = new File("./src/main/resources/movie.ani");
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(file));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(getClass().getClassLoader().getResourceAsStream("movie.ani")));
             String tempString = null;
             int line = 0;
             while ((tempString = reader.readLine()) != null) {

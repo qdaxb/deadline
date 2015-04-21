@@ -141,4 +141,9 @@ public class GameControllerImpl implements GameController {
         this.players = players;
     }
 
+    @Override
+    public boolean isOver() {
+        return gameScene.isOver();
+    }
+
 }

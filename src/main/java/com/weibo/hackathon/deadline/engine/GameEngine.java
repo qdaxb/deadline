@@ -52,7 +52,11 @@ public class GameEngine {
         GameEngine engine = new GameEngine();
         Properties properties = new Properties();
         NetworkManager manager = new NetworkManager();
-        manager.open(8880);
+        if (args.length >0) {
+            manager.open(Integer.parseInt(args[0]));
+        } else {
+            manager.open(6666);
+        }
         while (true) {
             NetworkChannel channel = manager.nextChannel();
             new PrepareThread(engine, channel).start();;

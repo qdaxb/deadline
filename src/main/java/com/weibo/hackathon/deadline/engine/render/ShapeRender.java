@@ -1,9 +1,6 @@
 package com.weibo.hackathon.deadline.engine.render;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,17 +17,16 @@ import com.weibo.hackathon.deadline.engine.utils.Util;
 
 public class ShapeRender implements Render<char[][]> {
     public ShapeRender() {
-        gameOver = loadAscIIImageResource("./src/main/resources/gameover.img");
-        deadline = loadAscIIImageResource("./src/main/resources/deadline.img");
-        success = loadAscIIImageResource("./src/main/resources/success.img");
-        cancell = loadAscIIImageResource("./src/main/resources/cancell.img");
+        gameOver = loadAscIIImageResource("gameover.img");
+        deadline = loadAscIIImageResource("deadline.img");
+        success = loadAscIIImageResource("success.img");
+        cancell = loadAscIIImageResource("cancell.img");
     }
 
     private char[][] loadAscIIImageResource(String filePath) {
-        File file = new File(filePath);
         List<char[]> charList = new ArrayList<char[]>();
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(file));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(getClass().getClassLoader().getResourceAsStream(filePath)));
             String tempString = null;
             while ((tempString = reader.readLine()) != null) {
                 charList.add(tempString.toCharArray());

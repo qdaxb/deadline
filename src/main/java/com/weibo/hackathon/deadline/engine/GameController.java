@@ -29,5 +29,6 @@ public interface GameController {
     public abstract void oneframe();
 
     public abstract void connect(GameController gc);
-    
+
+    boolean isOver();
 }

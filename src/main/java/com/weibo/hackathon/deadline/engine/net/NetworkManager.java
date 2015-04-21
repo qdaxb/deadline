@@ -4,6 +4,7 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -19,6 +20,7 @@ public class NetworkManager {
 
     public NetworkChannel nextChannel() throws IOException {
         Socket socket = server.accept();
+        System.out.println(new Date() + "accept user from:"+socket.getRemoteSocketAddress());
         NetworkChannel channel = new NetworkChannel(socket);
         channels.add(channel);
         return channel;

@@ -20,6 +20,7 @@ import com.weibo.hackathon.deadline.engine.model.TrickyCandy;
 
 public class GameSceneImpl implements GameScene {
     private String name ;
+    private int gameTime = 0;
     private RateControl event = new RateControl(1);
 
     public GameSceneImpl(String name) {
@@ -88,7 +89,7 @@ public class GameSceneImpl implements GameScene {
     private static final int FORWARD = 1;
     private static final int STOP = 0;
     private static final int BACKWARD = -1;
-    private final RateControl H = new RateControl(10), V = new RateControl(2), G = new RateControl(20);
+    private final RateControl H = new RateControl(1), V = new RateControl(1), G = new RateControl(2);
 
     private static final int TTL = 10;
     private static final int CANDY_BONOUS = 5;
@@ -125,6 +126,7 @@ public class GameSceneImpl implements GameScene {
                     xForward--;
                 }
             }
+            gameTime++;
             if (V.fulfill()) {
                 Iterator<Property> it = objects.iterator();
                 while (it.hasNext()) {
@@ -248,9 +250,11 @@ public class GameSceneImpl implements GameScene {
 
     private void makeResult(GameResult r) {
         result = r;
+        GameResult clonedResult = r.clone();
+        clonedResult.setTime(gameTime);
 
         if(pipe != null) {
-            pipe.reportResult(result);
+            pipe.reportResult(clonedResult);
         }
     }
 
