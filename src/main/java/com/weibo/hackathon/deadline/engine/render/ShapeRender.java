@@ -99,10 +99,9 @@ public class ShapeRender implements Render<char[][]> {
 
 
     private char[][] renderingCandy(Candy candy) {
-        char[][] shape = new char[3][3];
+        char[][] shape = new char[2][3];
         shape[0] = " & ".toCharArray();
         shape[1] = "&&&".toCharArray();
-        shape[2] = " | ".toCharArray();
         return shape;
     }
 

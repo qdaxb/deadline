@@ -21,6 +21,7 @@ import com.weibo.hackathon.deadline.engine.model.TrickyCandy;
 public class GameSceneImpl implements GameScene {
     private String name ;
     private int gameTime = 0;
+    public static int max = 0;
     private RateControl event = new RateControl(1);
 
     public GameSceneImpl(String name) {
@@ -247,6 +248,9 @@ public class GameSceneImpl implements GameScene {
     public void fail() {
         GameResult gameResult = GameResult.FAIL.clone();
         gameResult.setTime(gameTime);
+        if(gameTime > max) {
+            max = gameTime;
+        }
         makeResult(gameResult);
     }
 
@@ -361,6 +365,9 @@ public class GameSceneImpl implements GameScene {
     public void success() {
         GameResult gameResult = GameResult.SUCCESS.clone();
         gameResult.setTime(gameTime);
+        if(gameTime > max) {
+            max = gameTime;
+        }
         makeResult(gameResult);
     }
 
