@@ -17,15 +17,18 @@ import com.weibo.hackathon.deadline.engine.model.Location;
 import com.weibo.hackathon.deadline.engine.model.Player;
 import com.weibo.hackathon.deadline.engine.model.Scene;
 import com.weibo.hackathon.deadline.engine.model.TrickyCandy;
+import com.weibo.hackathon.deadline.engine.storage.GameDataStorage;
 
 public class GameSceneImpl implements GameScene {
-    private String name ;
+    private String name;
     private int gameTime = 0;
     public static int max = 0;
     private RateControl event = new RateControl(1);
 
+    private GameDataStorage storage = GameDataStorage.getInstance();
+
     public GameSceneImpl(String name) {
-        this.name=name;
+        this.name = name;
     }
 
     public String getName() {
@@ -140,7 +143,7 @@ public class GameSceneImpl implements GameScene {
                 Action action = actionGenerator.nextAction();
                 action.perform();
             }
-            if ( eventActionGenerator.isNextAvailable()) {
+            if (eventActionGenerator.isNextAvailable()) {
                 Action action = eventActionGenerator.nextAction();
                 action.perform();
             }
@@ -199,7 +202,7 @@ public class GameSceneImpl implements GameScene {
     private void determine() {
         synchronized (objects) {
             if (objects.size() == 1 && actionGenerator.isOver()) {
-                //result = GameResult.SUCCESS;
+                // result = GameResult.SUCCESS;
             } else {
                 Iterator<Property> it = objects.iterator();
                 while (it.hasNext()) {
@@ -248,15 +251,16 @@ public class GameSceneImpl implements GameScene {
     public void fail() {
         GameResult gameResult = GameResult.FAIL.clone();
         gameResult.setTime(gameTime);
-        if(gameTime > max) {
-            max = gameTime;
+        int maxTime = storage.getMaxTime();
+        if (gameTime > maxTime) {
+            storage.setMax(name + "," + gameTime);
         }
         makeResult(gameResult);
     }
 
     private void makeResult(GameResult r) {
         result = r;
-        if(pipe != null) {
+        if (pipe != null) {
             pipe.reportResult(result);
         }
     }
@@ -347,7 +351,7 @@ public class GameSceneImpl implements GameScene {
             prop.setPoint(new Point(loc.width, loc.height));
 
             prop.xMove.setSteps(Integer.MAX_VALUE);
-            prop.xMove.setMovement(BACKWARD-1);
+            prop.xMove.setMovement(BACKWARD - 1);
 
             prop.yMove.setSteps(0);
 
@@ -365,8 +369,9 @@ public class GameSceneImpl implements GameScene {
     public void success() {
         GameResult gameResult = GameResult.SUCCESS.clone();
         gameResult.setTime(gameTime);
-        if(gameTime > max) {
-            max = gameTime;
+        int maxTime = storage.getMaxTime();
+        if (gameTime > maxTime) {
+            storage.setMax(name + "," + gameTime);
         }
         makeResult(gameResult);
     }

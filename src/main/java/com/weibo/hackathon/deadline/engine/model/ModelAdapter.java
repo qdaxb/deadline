@@ -3,6 +3,7 @@ package com.weibo.hackathon.deadline.engine.model;
 import com.weibo.hackathon.deadline.controller.GameControllerImpl;
 import com.weibo.hackathon.deadline.controller.GameScene;
 import com.weibo.hackathon.deadline.controller.GameSceneImpl;
+import com.weibo.hackathon.deadline.engine.storage.GameDataStorage;
 
 import java.util.ArrayList;
 
@@ -32,10 +33,10 @@ public class ModelAdapter {
                 asc.loc = new Location(10, 20);
                 GameObject obj = new GameObject();
                 GameString gameString = new GameString();
-                gameString.content = "alive time:"+((InfoElement) elem).info.getTime()+",max:"+ GameSceneImpl.max;
+                gameString.content = "alive time:"+((InfoElement) elem).info.getTime()+",max:"+ GameDataStorage.getInstance().getMax();
                 System.out.println(gameString.content);
                 gameString.loc = new Location(8,28);
-                gameString.size = new Size(1,28);
+                gameString.size = new Size(1,34);
                 obj.element = gameString;
                 obj.father = go;
                 go.children.add(obj);

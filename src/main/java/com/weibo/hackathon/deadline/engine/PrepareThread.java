@@ -26,12 +26,15 @@ public class PrepareThread extends Thread {
             ConcurrentHashMap<String, List<GameSession>> sessions = engine.getSessions();
             List<GameSession> sessionRoom;
 
-            System.out.println();
+            channel.sendRaw("Please enter your name! \r\n".toCharArray());
+            String name = new String(channel.blockingReceive());
+            name = name.replaceAll("\r\n", "");
+
             channel.sendRaw("enter 1 to play, or input roomname to have fun with other players \r\n".toCharArray());
             String command = new String(channel.blockingReceive());
             channel.init();
             if (command.equals("1\r\n")) {
-                GameSession player = GameSessionFactory.createSession(new NetworkInput(channel), new NetworkOutputDevice(channel));
+                GameSession player = GameSessionFactory.createSession(new NetworkInput(channel), new NetworkOutputDevice(channel), name);
                 sessionRoom = new ArrayList<GameSession>();
                 sessionRoom.add(player);
                 new RoomManager(sessionRoom).start();
@@ -41,9 +44,9 @@ public class PrepareThread extends Thread {
                     sessionRoom = new ArrayList<GameSession>();
                     sessions.put(command, sessionRoom);
                     channel.sendRaw("Wait for other players! \r\n".toCharArray());
-                } 
+                }
 
-                GameSession player = GameSessionFactory.createSession(new NetworkInput(channel), new NetworkOutputDevice(channel));
+                GameSession player = GameSessionFactory.createSession(new NetworkInput(channel), new NetworkOutputDevice(channel), name);
                 sessionRoom = sessions.get(room);
                 sessionRoom.add(player);
                 if (sessionRoom.size() == 2) {

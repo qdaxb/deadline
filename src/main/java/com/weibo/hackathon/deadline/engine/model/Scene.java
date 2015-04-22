@@ -3,8 +3,6 @@ package com.weibo.hackathon.deadline.engine.model;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import com.weibo.hackathon.deadline.engine.GameResult;
-
 public class Scene {
     
     public Size size = new Size(28, 78);

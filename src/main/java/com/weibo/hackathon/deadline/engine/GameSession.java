@@ -9,6 +9,7 @@ import com.weibo.hackathon.deadline.engine.output.OutputDevice;
 public class GameSession {
     private InputManager inputManager;
     private OutputDevice outputDevice;
+    private String playerName;
     
     public void close(){
         
@@ -28,5 +29,13 @@ public class GameSession {
 
     public void setOutputDevice(OutputDevice outputDevice) {
         this.outputDevice = outputDevice;
+    }
+
+    public String getPlayerName() {
+        return playerName;
+    }
+
+    public void setPlayerName(String playerName) {
+        this.playerName = playerName;
     }
 }

@@ -8,10 +8,11 @@ import com.weibo.hackathon.deadline.engine.output.OutputDevice;
  * Created by axb on 15/4/17.
  */
 public class GameSessionFactory {
-    public static GameSession createSession(InputManager manager,OutputDevice device) {
+    public static GameSession createSession(InputManager manager,OutputDevice device, String playerName) {
         GameSession session = new GameSession();
         session.setInputManager(manager);
         session.setOutputDevice(device);
+        session.setPlayerName(playerName);
         return session;
     }
 }

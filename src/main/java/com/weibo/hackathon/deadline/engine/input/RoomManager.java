@@ -22,13 +22,13 @@ public class RoomManager extends Thread {
     @Override
     public void run() {
         if (sessions.size() == 1) {
-            //playAnimator();
+            // playAnimator();
         }
 
         List<GameController> gcl = createGameControllers();
 
 
-        outer:while (true) {
+        outer: while (true) {
             try {
                 Thread.sleep(150);
                 for (int i = 0; i < sessions.size(); i++) {
@@ -39,8 +39,8 @@ public class RoomManager extends Thread {
                     GameSession gameSession = sessions.get(i);
                     GameInput input = gameSession.getInputManager().getInputStatus();
 
-                    if(controller.isOver() ) {
-                        if(input == GameInput.RESTART && sessions.size() == 1 ) {
+                    if (controller.isOver()) {
+                        if (input == GameInput.RESTART && sessions.size() == 1) {
                             gcl = createGameControllers();
                             continue outer;
                         }
@@ -73,12 +73,12 @@ public class RoomManager extends Thread {
 
     private List<GameController> createGameControllers() {
         List<GameController> gcl = new ArrayList<GameController>(sessions.size());
-        for(int i=0;i<2;i++) {
+        for (int i = 0; i < 2; i++) {
             GameControllerImpl ctl1 = new GameControllerImpl();
-            ctl1.init("player" + i);
+            ctl1.init(sessions.get(i > sessions.size() - 1 ? sessions.size() - 1 : i).getPlayerName());
             gcl.add(ctl1);
         }
-        if (gcl.size()>1) {
+        if (gcl.size() > 1) {
             gcl.get(0).connect(gcl.get(1));
         }
         return gcl;
