@@ -102,7 +102,7 @@ public class ShapeRender implements Render<char[][]> {
         char[][] shape = new char[3][3];
         shape[0] = " & ".toCharArray();
         shape[1] = "&&&".toCharArray();
-        shape[3] = " | ".toCharArray();
+        shape[2] = " | ".toCharArray();
         return shape;
     }
 
