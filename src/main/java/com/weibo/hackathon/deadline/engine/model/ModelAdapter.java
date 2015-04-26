@@ -1,7 +1,7 @@
 package com.weibo.hackathon.deadline.engine.model;
 
 import com.weibo.hackathon.deadline.engine.storage.GameDataStorage;
-import com.weibo.hackathon.deadline.game.Play;
+import com.weibo.hackathon.deadline.game.Ground;
 import com.weibo.hackathon.deadline.game.Thing;
 import com.weibo.hackathon.deadline.game.Thing.Candy;
 import com.weibo.hackathon.deadline.game.Thing.Player;
@@ -61,18 +61,18 @@ public class ModelAdapter {
 	// return root;
 	// }
 
-	public static GameObject toGameObject(Play play) {
-		if (play == null)
+	public static GameObject toGameObject(Ground ground) {
+		if (ground == null)
 			return null;
 
 		GameObject go = new GameObject();
 		go.father = null;
-		if (!play.isOver()) {
+		if (!ground.isOver()) {
 			go.element = new Block();
-			go.element.size = new Size(play.getHeight(), play.getWidth());
+			go.element.size = new Size(ground.getHeight(), ground.getWidth());
 			go.element.loc = new Location(0, 0);
 
-			for (Thing t : play.getThings()) {
+			for (Thing t : ground.getThings()) {
 				GameObject to = new GameObject();
 				if (t instanceof Candy) {
 					com.weibo.hackathon.deadline.engine.model.Candy candyElement = new com.weibo.hackathon.deadline.engine.model.Candy();
@@ -91,19 +91,19 @@ public class ModelAdapter {
 				}
 			}
 		} else {
-			if (play.getResult() != null) {
+			if (ground.getResult() != null) {
 				AscIIImage img = new AscIIImage();
-				img.name = play.getResult().getText();
+				img.name = ground.getResult().getText();
 				img.loc = new Location(10, 20);
 				go.element = img;
 
 				GameObject obj = new GameObject();
 				GameString gameString = new GameString();
 				GameDataStorage storage = GameDataStorage.getInstance();
-				String text = play.getText();
+				String text = ground.getText();
 				gameString.content = (text != null ? text + ": alive time:"
 						: "alive time:")
-						+ play.getSurvive()
+						+ ground.getSurvive()
 						+ ",max:"
 						+ storage.getMax();
 				System.out.println(gameString.content);

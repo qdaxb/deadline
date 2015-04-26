@@ -11,7 +11,7 @@ import com.weibo.hackathon.deadline.engine.GameSession;
 import com.weibo.hackathon.deadline.engine.model.GameObject;
 import com.weibo.hackathon.deadline.engine.render.TextRender;
 import com.weibo.hackathon.deadline.game.Game;
-import com.weibo.hackathon.deadline.game.Play;
+import com.weibo.hackathon.deadline.game.Ground;
 
 public class RoomManager extends Thread {
 	private List<GameSession> sessions;
@@ -30,7 +30,7 @@ public class RoomManager extends Thread {
 
 		Game game = new Game();
 		game.setPlayerNumber(sessions.size());
-		List<Play> plays = new ArrayList<Play>(sessions.size());
+		List<Ground> plays = new ArrayList<Ground>(sessions.size());
 		for (String id : new TreeSet<String>(game.playerIds())) {
 			plays.add(game.getPlaying(id));
 		}
@@ -51,7 +51,7 @@ public class RoomManager extends Thread {
 						if (input == GameInput.RESTART && sessions.size() == 1) {
 							game = new Game();
 							game.setPlayerNumber(sessions.size());
-							plays = new ArrayList<Play>(sessions.size());
+							plays = new ArrayList<Ground>(sessions.size());
 							for (String id : new TreeSet<String>(
 									game.playerIds())) {
 								plays.add(game.getPlaying(id));
@@ -60,7 +60,7 @@ public class RoomManager extends Thread {
 						}
 						continue;
 					}
-					Play play = plays.get(i);
+					Ground play = plays.get(i);
 					if (input == GameInput.UP) {
 						play.playerUp();
 					} else if (input == GameInput.DOWN) {

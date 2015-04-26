@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.Objects;
 import java.util.Random;
 
+import org.omg.PortableInterceptor.SUCCESSFUL;
+
 import com.weibo.hackathon.deadline.game.EventDispatcher.Event;
 import com.weibo.hackathon.deadline.game.EventDispatcher.EventListener;
 import com.weibo.hackathon.deadline.game.EventDispatcher.MeetCandyEvent;
@@ -15,7 +17,7 @@ import com.weibo.hackathon.deadline.game.Thing.Candy;
 import com.weibo.hackathon.deadline.game.Thing.Player;
 import com.weibo.hackathon.deadline.game.Thing.Wall;
 
-public class Play {
+public class Ground {
 
 	public class EventProcessor implements EventListener {
 
@@ -60,8 +62,13 @@ public class Play {
 
 	public class ThingGenerator {
 		private final Random rand = new Random();
+		private int num = 500;
+		private boolean finished = false;
 
 		public Thing gen() {
+			if (finished) {
+				return null;
+			}
 			int type = rand.nextInt(10);
 			Thing t;
 			if (type < RATIO_CANDY) {
@@ -80,6 +87,11 @@ public class Play {
 			t.w = rand.nextInt(MAX_THING_WIDTH - 1) + 1;
 			t.y = rand.nextInt(h - t.h - 1) + 1;
 			t.x = w - t.w;
+
+			num--;
+			if (num < 0) {
+				finished = true;
+			}
 
 			return t;
 		}
@@ -108,7 +120,7 @@ public class Play {
 	private String text;
 	private Player player;
 
-	public Play(String id, int h, int w, Game controller) {
+	public Ground(String id, int h, int w, Game controller) {
 		super();
 		this.id = id;
 		this.h = h;
@@ -276,8 +288,13 @@ public class Play {
 	}
 
 	private void checkResult() {
-		// TODO Auto-generated method stub
-
+		if (generator.finished
+				&& (things.isEmpty() || things.size() == 1
+						&& things.contains(player))) {
+			win(String.format("%s has overcome all obstacles!", getId()));
+		} else if (player.x <= 1) {
+			fail(String.format("%s is killed!", getId()));
+		}
 	}
 
 	protected Collection<Thing> getThingsTouchingArea(int x, int y, int w, int h) {
@@ -316,7 +333,7 @@ public class Play {
 			// post adjust
 			if (t.x == 1) {
 				if (t instanceof Player) {
-					fail("killed!");
+					// fail("killed!");
 				} else {
 					t.setDisappear();
 				}
@@ -376,6 +393,7 @@ public class Play {
 		if (!isOver() && result != null) {
 			this.result = result;
 			this.text = text;
+			setUpdated();
 
 			// broadcast.
 			ResultEvent re = new ResultEvent();

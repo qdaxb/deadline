@@ -58,10 +58,10 @@ public class Game {
 
 				ResultEvent re = (ResultEvent) e;
 				String cancel = "cancelled by " + re.source;
-				String result = re.source + "has "
+				String result = re.source + " has "
 						+ (re.result == Result.WIN ? "won" : "failed");
 				for (String id : playings.keySet()) {
-					Play play = playings.get(id);
+					Ground play = playings.get(id);
 					if (re.result == Result.CANCEL) {
 						play.cancel(cancel);
 					} else {
@@ -94,15 +94,18 @@ public class Game {
 
 	private RateControl thingMove, playerYMove, playerXMove, thingGen, base;
 	private long timeTicks = 0;
-	private Map<String, Play> playings;
+	private Map<String, Ground> playings;
 	private final EventDispatcher eventDispatcher;
+	private final EventListener resultProcessor;
 	private final Map<String, Boolean> changed;
 	private boolean over = false;
 
 	public Game() {
-		playings = new HashMap<String, Play>();
+		playings = new HashMap<String, Ground>();
 		changed = new ConcurrentHashMap<String, Boolean>();
 		eventDispatcher = new EventDispatcher();
+		resultProcessor = new OneWinGameFinishProcessor();
+		eventDispatcher.addListener(ResultEvent.class, resultProcessor);
 		thingMove = new RateControl(THING_MOVE_WINDOW);
 		playerYMove = new RateControl(PLAYER_MOVE_WINDOW);
 		playerXMove = thingMove;
@@ -141,7 +144,7 @@ public class Game {
 		if (getPlayerNumber() <= 0 && playerNumber > 0) {
 			for (int i = 0; i < playerNumber; i++) {
 				String id = "player " + i;
-				Play p = new Play(id, GROUND_HEIGHT, GROUND_WIDTH, this);
+				Ground p = new Ground(id, GROUND_HEIGHT, GROUND_WIDTH, this);
 				eventDispatcher.addListener(MeetCandyEvent.class,
 						p.getEventListener());
 				playings.put(id, p);
@@ -156,7 +159,7 @@ public class Game {
 	public boolean canPlayerYMove() {
 		return playerYMove.ready();
 	}
-	
+
 	public boolean canPlayerXMove() {
 		return playerXMove.ready();
 	}
@@ -183,10 +186,10 @@ public class Game {
 	}
 
 	private void collectChanges() {
-		Map<String, Play> changes = new HashMap<String, Play>();
+		Map<String, Ground> changes = new HashMap<String, Ground>();
 		synchronized (this) {
 			for (String key : playings.keySet()) {
-				Play play = playings.get(key);
+				Ground play = playings.get(key);
 				if (play.lastUpdate() == now()) {
 					changes.put(key, play);
 				}
@@ -217,7 +220,7 @@ public class Game {
 	}
 
 	public boolean hasChanged(String id) {
-		Play play = getPlaying(id);
+		Ground play = getPlaying(id);
 		if (play == null) {
 			return false;
 		} else {
@@ -229,18 +232,18 @@ public class Game {
 		return base.ready();
 	}
 
-	private Set<Play> allPlays() {
-		Set<Play> set = com.weibo.hackathon.deadline.engine.utils.Util
+	private Set<Ground> allPlays() {
+		Set<Ground> set = com.weibo.hackathon.deadline.engine.utils.Util
 				.identitySet();
-		for (Play g : playings.values()) {
+		for (Ground g : playings.values()) {
 			set.add(g);
 		}
 		return set;
 	}
 
 	private void doStep() {
-		Set<Play> set = allPlays();
-		for (Play g : set) {
+		Set<Ground> set = allPlays();
+		for (Ground g : set) {
 			g.oneStep();
 		}
 	}
@@ -249,7 +252,7 @@ public class Game {
 		return timeTicks;
 	}
 
-	public Play getPlaying(String ground) {
+	public Ground getPlaying(String ground) {
 		return playings.get(ground);
 	}
 
