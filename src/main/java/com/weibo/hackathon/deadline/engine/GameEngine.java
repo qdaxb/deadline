@@ -1,25 +1,15 @@
 package com.weibo.hackathon.deadline.engine;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
+
 import com.weibo.hackathon.deadline.engine.input.InputManager;
-import com.weibo.hackathon.deadline.engine.input.NetworkInput;
-import com.weibo.hackathon.deadline.engine.model.Block;
-import com.weibo.hackathon.deadline.engine.model.Element;
-import com.weibo.hackathon.deadline.engine.model.GameObject;
-import com.weibo.hackathon.deadline.engine.model.GameString;
-import com.weibo.hackathon.deadline.engine.model.Location;
-import com.weibo.hackathon.deadline.engine.model.Player;
-import com.weibo.hackathon.deadline.engine.model.Size;
 import com.weibo.hackathon.deadline.engine.net.NetworkChannel;
 import com.weibo.hackathon.deadline.engine.net.NetworkManager;
-import com.weibo.hackathon.deadline.engine.output.NetworkOutputDevice;
 import com.weibo.hackathon.deadline.engine.output.OutputDevice;
 import com.weibo.hackathon.deadline.engine.render.Render;
-import com.weibo.hackathon.deadline.engine.render.TextRender;
-import com.weibo.hackathon.deadline.engine.utils.GameSessionFactory;
-
-import java.io.IOException;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 游戏引擎入口
@@ -27,7 +17,6 @@ import java.util.concurrent.ConcurrentHashMap;
 public class GameEngine {
 
 
-    private GameController gameController;
     private InputManager inputManager;
     private ConcurrentHashMap<String, List<GameSession>> sessions = new ConcurrentHashMap<String, List<GameSession>>();
     private Render<String> render;

@@ -1,5 +1,9 @@
 package com.weibo.hackathon.deadline.engine.utils;
 
+import java.util.Collections;
+import java.util.IdentityHashMap;
+import java.util.Set;
+
 public class Util {
     public static void printArray(char[][] sceneArray) {
         for (int i = 0; i < sceneArray.length; i++) {
@@ -9,4 +13,9 @@ public class Util {
             System.out.println();
         }
     }
+
+	public static <E> Set<E> identitySet() {
+		IdentityHashMap<E, Boolean> map = new IdentityHashMap<E, Boolean>();
+		return Collections.newSetFromMap(map);
+	}
 }

@@ -33,7 +33,7 @@ public class PrepareThread extends Thread {
             channel.sendRaw("enter 1 to play, or input roomname to have fun with other players \r\n".toCharArray());
             String command = new String(channel.blockingReceive());
             channel.init();
-            if (command.equals("1\r\n")) {
+            if (command.trim().equals("1")) {
                 GameSession player = GameSessionFactory.createSession(new NetworkInput(channel), new NetworkOutputDevice(channel), name);
                 sessionRoom = new ArrayList<GameSession>();
                 sessionRoom.add(player);
