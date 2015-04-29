@@ -79,12 +79,14 @@ public class Ground {
 					c.helpful = true;
 				}
 				t = c;
+				t.h = 2;
+				t.w = 3;
 			} else {
 				t = new Wall();
+				t.h = rand.nextInt(MAX_THING_HEIGHT - 1) + 1;
+				t.w = rand.nextInt(MAX_THING_WIDTH - 1) + 1;
 			}
 
-			t.h = rand.nextInt(MAX_THING_HEIGHT - 1) + 1;
-			t.w = rand.nextInt(MAX_THING_WIDTH - 1) + 1;
 			t.y = rand.nextInt(h - t.h - 1) + 1;
 			t.x = w - t.w;
 

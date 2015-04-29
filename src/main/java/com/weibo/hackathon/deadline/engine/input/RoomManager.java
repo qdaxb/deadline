@@ -37,7 +37,7 @@ public class RoomManager extends Thread {
 
 		outer: while (true) {
 			try {
-				Thread.sleep(150);
+				Thread.sleep(30);
 				for (int i = 0; i < sessions.size(); i++) {
 					// GameRoom controller = gcl.get(i);
 					// for (int i = 0; i < sessions.size(); i++) {
