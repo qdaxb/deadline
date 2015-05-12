@@ -2,6 +2,7 @@
 
 ## 说明
 hackathon大赛中的作品，基于telnet的小游戏，关于程序员与deadline搏斗的故事。
+![deadline](http://blog.2baxb.me/wp-content/uploads/2015/05/deadline.png)
 
 ## 开始游戏
 ```
