@@ -15,7 +15,7 @@ $telnet localhost 6666
 
 ## 操作说明
 j：下  
-k：上
-r：重新开始
+k：上  
+r：重新开始  
 ctrl+]：退出
 
