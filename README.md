@@ -6,11 +6,11 @@ hackathon大赛中的作品，基于telnet的小游戏，关于程序员与deadl
 
 ## 开始游戏
 ```
-$git clone https://github.com/qdaxb/deadline.git
-$cd deadline
-$mvn package
-$java -jar target/deadline-0.0.1-SNAPSHOT.jar &
-$telnet localhost 6666
+git clone https://github.com/qdaxb/deadline.git
+cd deadline
+mvn package
+java -jar target/deadline-0.0.1-SNAPSHOT.jar &
+telnet localhost 6666
 ```
 
 ## 操作说明
