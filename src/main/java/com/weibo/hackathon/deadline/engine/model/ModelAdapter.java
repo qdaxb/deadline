@@ -105,8 +105,8 @@ public class ModelAdapter {
                 // + storage.getMax()
                 ;
                 System.out.println(gameString.content);
-                gameString.loc = new Location(-3, 10);
-                gameString.size = new Size(1, 34);
+                gameString.loc = new Location(-3, 0);
+                gameString.size = new Size(1, 40);
                 obj.element = gameString;
                 obj.father = go;
                 go.children.add(obj);
