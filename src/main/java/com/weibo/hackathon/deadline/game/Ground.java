@@ -99,10 +99,10 @@ public class Ground {
 		}
 	}
 
-	private static final int RATIO_HARMFUL_CANDY = 3;
+	private static final int RATIO_HARMFUL_CANDY = 2;
 	private static final int RATIO_CANDY = 2;
-	private static final int MAX_THING_WIDTH = 6;
-	private static final int MAX_THING_HEIGHT = 9;
+	private static final int MAX_THING_WIDTH = 2;
+	private static final int MAX_THING_HEIGHT = 7;
 	private static final int WALL_TTL = 5;
 	private static final int CANDY_BONOUS = 5;
 	private static final int UP = 1;
@@ -137,8 +137,8 @@ public class Ground {
 		player.setLongLive();
 		player.x = (w - player.w) / 2;
 		player.y = (h - player.h) / 2;
-		player.w = 3;
-		player.h = 3;
+		player.w = 1;
+		player.h = 1;
 		things.add(player);
 	}
 

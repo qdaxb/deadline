@@ -23,7 +23,7 @@ public class RoomManager extends Thread {
 	@Override
 	public void run() {
 		if (sessions.size() == 1) {
-			// playAnimator();
+			playAnimator();
 		}
 
 		// List<GameRoom> gcl = createGameControllers();

@@ -101,20 +101,18 @@ public class ShapeRender implements Render<char[][]> {
 	private char[][] renderingCandy(Candy candy) {
 		char[][] shape = new char[2][3];
 		if (candy.helpful) {
-			shape[0] = " & ".toCharArray();
-			shape[1] = "&&&".toCharArray();
+			shape[0] = "$$$".toCharArray();
+			shape[1] = "$$$".toCharArray();
 		} else {
-			shape[0] = " % ".toCharArray();
-			shape[1] = "%%%".toCharArray();
+			shape[0] = "!!!".toCharArray();
+			shape[1] = "!!!".toCharArray();
 		}
 		return shape;
 	}
 
 	private char[][] renderingPlayer(Player player) {
-		char[][] shape = new char[3][3];
-		shape[0] = " @ ".toCharArray();
-		shape[1] = " | ".toCharArray();
-		shape[2] = "/ \\".toCharArray();
+		char[][] shape = new char[1][1];
+		shape[0] = "@".toCharArray();
 		return shape;
 	}
 
